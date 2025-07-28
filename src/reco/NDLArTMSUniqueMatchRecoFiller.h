@@ -15,6 +15,8 @@
 
 namespace cafmaker
 {
+  bool Track_match_sorter(const caf::SRNDTrackAssn trackMatch1, const caf::SRNDTrackAssn trackMatch2);
+
   class NDLArTMSUniqueMatchRecoFiller : public cafmaker::IRecoBranchFiller
   {
     public:
@@ -22,37 +24,15 @@ namespace cafmaker
 
       std::vector<double> Project_track(const caf::SRTrack track, const bool forward) const;
 
-      std::vector<double> Angle_between_tracks(const caf::SRTRack tms_track, const caf::SRTRack lar_track) const;
+      std::vector<double> Angle_between_tracks(const caf::SRTrack tms_track, const caf::SRTrack lar_track) const;
 
-      bool Consider_TMS_Track(const caf::SRTrack tms_track, const double tms_z_cutoff) const;
+      bool Consider_TMS_track(const caf::SRTrack tms_track, const double tms_z_cutoff) const;
 
-      bool Consider_LAr_Track(const caf::SRTrack lar_track, const double lar_z_cutoff) const;
-
-      bool Track_match_sorter(const caf::SRNDTrackAssn trackMatch1, const caf::SRNDTrackAssn trackMatch2) const;
+      bool Consider_LAr_track(const caf::SRTrack lar_track, const double lar_z_cutoff) const;
 
       std::deque<Trigger> GetTriggers(int triggerType, bool beamOnly) const override;
 
       RecoFillerType FillerType() const override { return RecoFillerType::Matcher; }
-
-      struct TMSLims  //defines TMS geometry [cm]
-      {
-        double tms_x_lim1 = -352.0;
-        double tms_x_lim2 = 352.0;
-        double tms_y_lim1 = -386.4;
-        double tms_y_lim2 = 115.9;
-        double tms_z_lim1 = 1136.2;
-        double tms_z_lim2 = 1831.4;
-      };
-
-      struct LArLims   //defines LAr geometry [cm]
-      {
-        double lar_x_lim1 = -347.848;
-        double lar_x_lim2 = 347.848;
-        double lar_y_lim1 = -216.671;
-        double lar_y_lim2 = 82.9282;
-        double lar_z_lim1 = 417.924;
-        double lar_z_lim2 = 913.588;
-      };
 
     private:
       void MatchTracks(caf::StandardRecord &sr) const;
@@ -75,6 +55,20 @@ namespace cafmaker
       bool use_time;
       double sigma_t;
       double f_cut;
+
+      double tms_x_lim1 = -352.0;
+      double tms_x_lim2 = 352.0;
+      double tms_y_lim1 = -386.4;
+      double tms_y_lim2 = 115.9;
+      double tms_z_lim1 = 1136.2;
+      double tms_z_lim2 = 1831.4;
+
+      double lar_x_lim1 = -347.848;
+      double lar_x_lim2 = 347.848;
+      double lar_y_lim1 = -216.671;
+      double lar_y_lim2 = 82.9282;
+      double lar_z_lim1 = 417.924;
+      double lar_z_lim2 = 913.588;
   };
 }
 

@@ -3,6 +3,18 @@
 
 namespace cafmaker
 {
+  bool Track_match_sorter(const caf::SRNDTrackAssn trackMatch1, const caf::SRNDTrackAssn trackMatch2) {
+    double fScore1 = trackMatch1.matchScore;
+    double fScore2 = trackMatch2.matchScore;
+
+    if (fScore1 < fScore2) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double sigmaT, const double fCut)
     : IRecoBranchFiller("LArTMSMatcher")
   {
@@ -21,6 +33,10 @@ namespace cafmaker
 
   std::vector<double> NDLArTMSUniqueMatchRecoFiller::Project_track(const caf::SRTrack track, const bool forward) const
   {
+    double proj_z;
+    double proj_x;
+    double proj_y;
+
     if (forward) { // projects a LAr track forward to TMS
       double x = track.end.x;
       double y = track.end.y;
@@ -30,7 +46,7 @@ namespace cafmaker
       double dir_y = track.enddir.y;
       double dir_z = track.enddir.z;
 
-      double proj_z = TMSLims.tms_z_lim1 - z;
+      double proj_z = tms_z_lim1 - z;
       double proj_x = dir_x*proj_z/dir_z + x;
       double proj_y = dir_y*proj_z/dir_z + y;
     }
@@ -43,7 +59,7 @@ namespace cafmaker
       double dir_y = track.dir.y;
       double dir_z = track.dir.z;
 
-      double proj_z = z - LArLims.lar_z_lim2;
+      double proj_z = z - lar_z_lim2;
       double proj_x = -dir_x*proj_z/dir_z + x;
       double proj_y = -dir_y*proj_z/dir_z + y;
     }
@@ -91,14 +107,18 @@ namespace cafmaker
     double dir_y = tms_track.dir.y;
     double dir_z = tms_track.dir.z;
 
-    if ((x_start > TMSLims.tms_x_lim1)&&(x_start < TMSLims.tms_x_lim2) &&
-        (y_start > TMSLims.tms_y_lim1)&&(y_start < TMSLims.tms_y_lim2) &&
-        (z_start > TMSLims.tms_z_lim1)&&(z_start < TMSLims.tms_z_lim1 + tms_z_cutoff) && // checks track begins within fiducial volume and close enough to front
+    if ((x_start > tms_x_lim1)&&(x_start < tms_x_lim2) &&
+        (y_start > tms_y_lim1)&&(y_start < tms_y_lim2) &&
+        (z_start > tms_z_lim1)&&(z_start < tms_z_lim1 + tms_z_cutoff) && // checks track begins within fiducial volume and close enough to front
       
-        (Project_track(tms_track,false)[0] > LArLims.lar_x_lim1)&&(Project_track(tms_track,false)[0] < LArLims.lar_x_lim2) &&
-        (Project_track(tms_track,false)[1] > LArLims.lar_y_lim1)&&(Project_track(tms_track,false)[1] < LArLims.lar_y_lim2)) // checks that direction would have allowed it to originate from LAr
-          {return true} 
-    else {return false}
+        (Project_track(tms_track,false)[0] > lar_x_lim1)&&(Project_track(tms_track,false)[0] < lar_x_lim2) &&
+        (Project_track(tms_track,false)[1] > lar_y_lim1)&&(Project_track(tms_track,false)[1] < lar_y_lim2)) // checks that direction would have allowed it to originate from LAr
+          {
+            return true;
+          } 
+    else {
+      return false;
+    }
   }
 
   bool NDLArTMSUniqueMatchRecoFiller::Consider_LAr_track(const caf::SRTrack lar_track, const double lar_z_cutoff) const
@@ -115,26 +135,22 @@ namespace cafmaker
     double dir_y = lar_track.enddir.y;
     double dir_z = lar_track.enddir.z;
 
-    if ((x_start > LArLims.lar_x_lim1)&&(x_start < LArLims.lar_x_lim2) &&
-        (y_start > LArLims.lar_y_lim1)&&(y_start < LArLims.lar_y_lim2) &&
-        (z_start > LArLims.lar_z_lim1)&&(z_start < LArLims.lar_z_lim2) && // checks track begins within fiducial volume
+    if ((x_start > lar_x_lim1)&&(x_start < lar_x_lim2) &&
+        (y_start > lar_y_lim1)&&(y_start < lar_y_lim2) &&
+        (z_start > lar_z_lim1)&&(z_start < lar_z_lim2) && // checks track begins within fiducial volume
 
-        (x_end > LArLims.lar_x_lim1)&&(x_end < LArLims.lar_x_lim2) &&
-        (y_end > LArLims.lar_y_lim1)&&(y_end < LArLims.lar_y_lim2) &&
-        (z_end > LArLims.lar_z_lim2 - lar_z_cutoff)&&(z_end < LArLims.lar_z_lim2) && // checks track ends close enough to back of LAr
+        (x_end > lar_x_lim1)&&(x_end < lar_x_lim2) &&
+        (y_end > lar_y_lim1)&&(y_end < lar_y_lim2) &&
+        (z_end > lar_z_lim2 - lar_z_cutoff)&&(z_end < lar_z_lim2) && // checks track ends close enough to back of LAr
       
-        (Project_track(lar_track,true)[0] > TMSLims.tms_x_lim1)&&(Project_track(lar_track,true)[0] < TMSLims.tms_x_lim2) &&
-        (Project_track(lar_track,true)[1] > TMSLims.tms_y_lim1)&&(Project_track(lar_track,true)[1] < TMSLims.tms_y_lim2)) // checks that direction would allow it to hit TMS
-        {return true} 
-    else {return false}
-  }
-
-  bool NDLArTMSUniqueMatchRecoFiller::Track_match_sorter(const caf::SRNDTrackAssn trackMatch1, const caf::SRNDTrackAssn trackMatch2) const {
-    double fScore1 = trackMatch1.matchScore;
-    double fScore2 = trackMatch2.matchScore;
-
-    if (fScore1 < fScore2) {return true}
-    else {return false}
+        (Project_track(lar_track,true)[0] > tms_x_lim1)&&(Project_track(lar_track,true)[0] < tms_x_lim2) &&
+        (Project_track(lar_track,true)[1] > tms_y_lim1)&&(Project_track(lar_track,true)[1] < tms_y_lim2)) // checks that direction would allow it to hit TMS
+        {
+          return true;
+        } 
+    else {
+      return false;
+    }
   }
 
   void
@@ -164,7 +180,7 @@ namespace cafmaker
 
         for (unsigned int ixn_pan = 0; ixn_pan < sr.nd.lar.npandora; ixn_pan++)
         {
-          caf::SRNDLArInt pan_int = sr.nd.lar.ixn[ixn_pan];
+          caf::SRNDLArInt pan_int = sr.nd.lar.pandora[ixn_pan];
           unsigned int n_pan_tracks = pan_int.ntracks;
 
           for (unsigned int ipan = 0; ipan < n_pan_tracks; ipan++)
@@ -195,13 +211,14 @@ namespace cafmaker
             }
             if (use_time) {
               double delta_t = 0; // placeholder until time is added
-              fScore += pow(delta_t/sigma_t,2)
+              fScore += pow(delta_t/sigma_t,2);
             }
         
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
             tmsid.idx = itms;
             caf::SRNDLArID panid;
+            panid.reco = caf::kPandoraNDLAr;
             panid.ixn = ixn_pan;
             panid.idx = ipan;
 
@@ -210,15 +227,15 @@ namespace cafmaker
             potential_match.larid = panid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
-            potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end())
+            potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end());
 
-            possiblePandoraMatches.push_back(potential_match)
+            possiblePandoraMatches.push_back(potential_match);
           }
         }
 
         for (unsigned int ixn_dlp = 0; ixn_dlp < sr.nd.lar.ndlp; ixn_dlp++)
         {
-          caf::SRNDLArInt dlp_int = sr.nd.lar.ixn[ixn_dlp];
+          caf::SRNDLArInt dlp_int = sr.nd.lar.dlp[ixn_dlp];
           unsigned int n_dlp_tracks = dlp_int.ntracks;
 
           for (unsigned int idlp = 0; idlp < n_dlp_tracks; idlp++)
@@ -255,6 +272,7 @@ namespace cafmaker
             tmsid.ixn = ixn_tms;
             tmsid.idx = itms;
             caf::SRNDLArID dlpid;
+            dlpid.reco = caf::kDeepLearnPhys;
             dlpid.ixn = ixn_dlp;
             dlpid.idx = idlp;
 
