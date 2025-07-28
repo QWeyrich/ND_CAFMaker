@@ -11,13 +11,24 @@
 #include "TMSRecoBranchFiller.h"
 
 #include "duneanaobj/StandardRecord/StandardRecord.h"
+#include "TMath.h"
 
 namespace cafmaker
 {
   class NDLArTMSUniqueMatchRecoFiller : public cafmaker::IRecoBranchFiller
   {
     public:
-      NDLArTMSUniqueMatchRecoFiller(double sigmaX, double sigmaY, bool singleAngle, double sigmaTh, double sigmaThX, double sigmaThY, bool useTime, double sigmaT, double fCut);
+      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double sigmaT, const double fCut);
+
+      std::vector<double> Project_track(const caf::SRTrack track, const bool forward) const;
+
+      std::vector<double> Angle_between_tracks(const caf::SRTRack tms_track, const caf::SRTRack lar_track) const;
+
+      bool Consider_TMS_Track(const caf::SRTrack tms_track, const double tms_z_cutoff) const;
+
+      bool Consider_LAr_Track(const caf::SRTrack lar_track, const double lar_z_cutoff) const;
+
+      bool Track_match_sorter(const caf::SRNDTrackAssn trackMatch1, const caf::SRNDTrackAssn trackMatch2) const;
 
       std::deque<Trigger> GetTriggers(int triggerType, bool beamOnly) const override;
 
@@ -63,7 +74,7 @@ namespace cafmaker
       double sigma_angle_y;
       bool use_time;
       double sigma_t;
-      double fcut;
+      double f_cut;
   };
 }
 

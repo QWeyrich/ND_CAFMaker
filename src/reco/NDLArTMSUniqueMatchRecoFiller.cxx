@@ -3,7 +3,7 @@
 
 namespace cafmaker
 {
-  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(double sigmaX, double sigmaY, bool singleAngle, double sigmaTh, double sigmaThX, double sigmaThY, bool useTime, double sigmaT, double fCut)
+  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double sigmaT, const double fCut)
     : IRecoBranchFiller("LArTMSMatcher")
   {
     sigma_x = sigmaX;
@@ -14,12 +14,12 @@ namespace cafmaker
     sigma_angle_y = sigmaThY;
     use_time = useTime;
     sigma_t = sigmaT;
-    fcut = fCut;
+    f_cut = fCut;
     // nothing to do
     SetConfigured(true);
   }
 
-  std::vector<double> NDLArTMSUniqueMatchRecoFiller::Project_track(caf::SRTrack track, bool forward) const
+  std::vector<double> NDLArTMSUniqueMatchRecoFiller::Project_track(const caf::SRTrack track, const bool forward) const
   {
     if (forward) { // projects a LAr track forward to TMS
       double x = track.end.x;
@@ -70,9 +70,9 @@ namespace cafmaker
         double yz_dot_prod = yz_dot_prod/(sqrt(pow(tms_dir_y,2)+pow(tms_dir_z,2))*sqrt(pow(lar_dir_y,2)+pow(lar_dir_z,2)));
       }
       double dot_prod = tms_dir_x*lar_dir_x + tms_dir_y*lar_dir_y + tms_dir_z*lar_dir_z;
-      double angle_x = 180.0/std::numbers::pi * acos(dot_prod_x);
-      double angle_y = 180.0/std::numbers::pi * acos(dot_prod_y);
-      double angle_overall = 180.0/std::numbers::pi * acos(dot_prod);
+      double angle_x = 180.0/TMath::Pi() * acos(dot_prod_x);
+      double angle_y = 180.0/TMath::Pi() * acos(dot_prod_y);
+      double angle_overall = 180.0/TMath::Pi() * acos(dot_prod);
       std::vector<double> angles = {angle_x,angle_y,angle_overall};
       return angles;
   }
@@ -162,9 +162,9 @@ namespace cafmaker
           continue; //skips the tms track if it isn't suitable according to the function
         }
 
-        for (unsigned int ixn_pan = 0; ixn_pan < sr.nd.lar.pandora.npandora; ixn_pan++)
+        for (unsigned int ixn_pan = 0; ixn_pan < sr.nd.lar.npandora; ixn_pan++)
         {
-          caf::SRNDLArInt pan_int = sr.nd.lar.pandora.ixn[ixn_pan];
+          caf::SRNDLArInt pan_int = sr.nd.lar.ixn[ixn_pan];
           unsigned int n_pan_tracks = pan_int.ntracks;
 
           for (unsigned int ipan = 0; ipan < n_pan_tracks; ipan++)
@@ -182,8 +182,10 @@ namespace cafmaker
 
             std::vector<double> angles = Angle_between_tracks(tms_trk,pan_trk);
 
+            double fScore = std::numeric_limits<double>::max();
+
             if (single_angle) {
-              double angle = angles.end();
+              double angle = *angles.end();
               double fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
@@ -208,15 +210,15 @@ namespace cafmaker
             potential_match.larid = panid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
-            potential_match.angdispl = cos(std::numbers::pi/180.0 * angles.end())
+            potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end())
 
             possiblePandoraMatches.push_back(potential_match)
           }
         }
 
-        for (unsigned int ixn_dlp = 0; ixn_dlp < sr.nd.lar.dlp.ndlp; ixn_dlp++)
+        for (unsigned int ixn_dlp = 0; ixn_dlp < sr.nd.lar.ndlp; ixn_dlp++)
         {
-          caf::SRNDLArInt dlp_int = sr.nd.lar.dlp.ixn[ixn_dlp];
+          caf::SRNDLArInt dlp_int = sr.nd.lar.ixn[ixn_dlp];
           unsigned int n_dlp_tracks = dlp_int.ntracks;
 
           for (unsigned int idlp = 0; idlp < n_dlp_tracks; idlp++)
@@ -233,9 +235,10 @@ namespace cafmaker
             double delta_y = tms_trk.start.y - proj_vec[1];
 
             std::vector<double> angles = Angle_between_tracks(tms_trk,dlp_trk);
+            double fScore = std::numeric_limits<double>::max();
 
             if (single_angle) {
-              double angle = angles.end();
+              double angle = *angles.end();
               double fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
@@ -260,7 +263,7 @@ namespace cafmaker
             potential_match.larid = dlpid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
-            potential_match.angdispl = cos(std::numbers::pi/180.0 * angles.end());
+            potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end());
 
             possibleSPINEMatches.push_back(potential_match);
           }
@@ -271,20 +274,20 @@ namespace cafmaker
     std::sort(possiblePandoraMatches.begin(),possiblePandoraMatches.end(),Track_match_sorter);
 
     std::vector<caf::SRNDLArID> matched_pan; 
-    std::vector<caf::SRTMSID> matched_tms; // stores LAr (Pandora) and TMS indices that have already been matched
+    std::vector<caf::SRTMSID> matched_tmspan; // stores LAr (Pandora) and TMS indices that have already been matched
 
-    for (unsigned int match_idx = 0; match_idx < possiblePandoraMatches.size(), match_idx++) {
+    for (unsigned int match_idx = 0; match_idx < possiblePandoraMatches.size(); match_idx++) {
       caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
       double score = track_match.matchScore;
       if (score > f_cut) {break;}
       caf::SRNDLArID panid = track_match.larid;
       if (std::count(matched_pan.begin(),matched_pan.end(),panid) == 0) {
         caf::SRTMSID tmsid = track_match.tmsid;
-        if (std::count(matched_tms.begin(),matched_tms.end(),tmsid) == 0) {
-          matched_tms.push_back(tmsid);
+        if (std::count(matched_tmspan.begin(),matched_tmspan.end(),tmsid) == 0) {
+          matched_tmspan.push_back(tmsid);
           matched_pan.push_back(panid);
-          sr.nd.trkmatch.push_back(track_match);
-          sr.nd.ntrkmatch += 1;
+          sr.nd.trkmatch.extrap.push_back(track_match);
+          sr.nd.trkmatch.nextrap += 1;
         }
       }
     }
@@ -292,20 +295,20 @@ namespace cafmaker
     std::sort(possibleSPINEMatches.begin(),possibleSPINEMatches.end(),Track_match_sorter);
 
     std::vector<caf::SRNDLArID> matched_dlp; 
-    std::vector<caf::SRTMSID> matched_tms; // stores LAr (SPINE) and TMS indices that have already been matched
+    std::vector<caf::SRTMSID> matched_tmsdlp; // stores LAr (SPINE) and TMS indices that have already been matched
 
-    for (unsigned int match_idx = 0; match_idx < possibleSPINEMatches.size(), match_idx++) {
+    for (unsigned int match_idx = 0; match_idx < possibleSPINEMatches.size(); match_idx++) {
       caf::SRNDTrackAssn track_match = possibleSPINEMatches[match_idx];
       double score = track_match.matchScore;
       if (score > f_cut) {break;}
-      caf::SRNDLArID dlpid = track_match.dlpid;
+      caf::SRNDLArID dlpid = track_match.larid;
       if (std::count(matched_dlp.begin(),matched_dlp.end(),dlpid) == 0) {
         caf::SRTMSID tmsid = track_match.tmsid;
-        if (std::count(matched_tms.begin(),matched_tms.end(),tmsid) == 0) {
-          matched_tms.push_back(tmsid);
+        if (std::count(matched_tmsdlp.begin(),matched_tmsdlp.end(),tmsid) == 0) {
+          matched_tmsdlp.push_back(tmsid);
           matched_dlp.push_back(dlpid);
-          sr.nd.trkmatch.push_back(track_match);
-          sr.nd.ntrkmatch += 1;
+          sr.nd.trkmatch.extrap.push_back(track_match);
+          sr.nd.trkmatch.nextrap += 1;
         }
       }
     }
