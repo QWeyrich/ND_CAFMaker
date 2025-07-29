@@ -33,35 +33,39 @@ namespace cafmaker
 
   std::vector<double> NDLArTMSUniqueMatchRecoFiller::Project_track(const caf::SRTrack track, const bool forward) const
   {
+    double x, y, z;
+
+    double dir_x, dir_y, dir_z;
+    
     double proj_z;
     double proj_x;
     double proj_y;
 
     if (forward) { // projects a LAr track forward to TMS
-      double x = track.end.x;
-      double y = track.end.y;
-      double z = track.end.z;
+      x = track.end.x;
+       y = track.end.y;
+       z = track.end.z;
 
-      double dir_x = track.enddir.x;
-      double dir_y = track.enddir.y;
-      double dir_z = track.enddir.z;
+       dir_x = track.enddir.x;
+       dir_y = track.enddir.y;
+       dir_z = track.enddir.z;
 
-      double proj_z = tms_z_lim1 - z;
-      double proj_x = dir_x*proj_z/dir_z + x;
-      double proj_y = dir_y*proj_z/dir_z + y;
+       proj_z = tms_z_lim1 - z;
+       proj_x = dir_x*proj_z/dir_z + x;
+       proj_y = dir_y*proj_z/dir_z + y;
     }
     else { // projects a TMS track backward to LAr
-      double x = track.start.x;
-      double y = track.start.y;
-      double z = track.start.z;
+       x = track.start.x;
+       y = track.start.y;
+       z = track.start.z;
 
-      double dir_x = track.dir.x;
-      double dir_y = track.dir.y;
-      double dir_z = track.dir.z;
+       dir_x = track.dir.x;
+       dir_y = track.dir.y;
+       dir_z = track.dir.z;
 
-      double proj_z = z - lar_z_lim2;
-      double proj_x = -dir_x*proj_z/dir_z + x;
-      double proj_y = -dir_y*proj_z/dir_z + y;
+       proj_z = z - lar_z_lim2;
+       proj_x = -dir_x*proj_z/dir_z + x;
+       proj_y = -dir_y*proj_z/dir_z + y;
     }
     std::vector<double> proj_point = {proj_x, proj_y, proj_z};
     return proj_point;
@@ -202,12 +206,12 @@ namespace cafmaker
 
             if (single_angle) {
               double angle = *angles.end();
-              double fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
+              fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
               double angle_x = angles[0];
               double angle_y = angles[1];
-              double fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
+              fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
               double delta_t = 0; // placeholder until time is added
@@ -256,12 +260,12 @@ namespace cafmaker
 
             if (single_angle) {
               double angle = *angles.end();
-              double fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
+              fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
               double angle_x = angles[0];
               double angle_y = angles[1];
-              double fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
+              fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
               double delta_t = 0; // placeholder until time is added
