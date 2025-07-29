@@ -292,7 +292,7 @@ namespace cafmaker
       if (score > f_cut) {break;}
       caf::SRNDLArID panid = track_match.larid;
       bool seen_lar = false;
-      for (seen_panid : matched_pan) {
+      for (auto const seen_panid : matched_pan) {
         if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
           seen_lar = true;
           break;
@@ -301,7 +301,7 @@ namespace cafmaker
       if (seen_lar) {continue;}
       caf::SRTMSID tmsid = track_match.tmsid;
       bool seen_tms = false;
-      for (seen_tmsid : matched_tmspan) {
+      for (auto const seen_tmsid : matched_tmspan) {
         if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
           seen_tms = true;
           break;
@@ -327,7 +327,7 @@ namespace cafmaker
       if (score > f_cut) {break;}
       caf::SRNDLArID dlpid = track_match.larid;
       bool seen_lar = false;
-      for (seen_dlpid : matched_dlp) {
+      for (auto const seen_dlpid : matched_dlp) {
         if (seen_dlpid.ixn == dlpid.ixn && seen_dlpid.idx == dlpid.idx) {
           seen_lar = true;
           break;
@@ -336,7 +336,7 @@ namespace cafmaker
       if (seen_lar) {continue;}
       caf::SRTMSID tmsid = track_match.tmsid;
       bool seen_tms = false;
-      for (seen_tmsid : matched_tmsdlp) {
+      for (auto const seen_tmsid : matched_tmsdlp) {
         if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
           seen_tms = true;
           break;
