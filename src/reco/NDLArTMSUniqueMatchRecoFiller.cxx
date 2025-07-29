@@ -86,8 +86,8 @@ namespace cafmaker
         double yz_dot_prod = yz_dot_prod/(sqrt(pow(tms_dir_y,2)+pow(tms_dir_z,2))*sqrt(pow(lar_dir_y,2)+pow(lar_dir_z,2)));
       }
       double dot_prod = tms_dir_x*lar_dir_x + tms_dir_y*lar_dir_y + tms_dir_z*lar_dir_z;
-      double angle_x = 180.0/TMath::Pi() * acos(dot_prod_x);
-      double angle_y = 180.0/TMath::Pi() * acos(dot_prod_y);
+      double angle_x = 180.0/TMath::Pi() * acos(xz_dot_prod);
+      double angle_y = 180.0/TMath::Pi() * acos(yz_dot_prod);
       double angle_overall = 180.0/TMath::Pi() * acos(dot_prod);
       std::vector<double> angles = {angle_x,angle_y,angle_overall};
       return angles;
@@ -265,7 +265,7 @@ namespace cafmaker
             }
             if (use_time) {
               double delta_t = 0; // placeholder until time is added
-              fScore += pow(delta_t/sigma_t,2)
+              fScore += pow(delta_t/sigma_t,2);
             }
         
             caf::SRTMSID tmsid;
