@@ -313,7 +313,6 @@ namespace cafmaker
       matched_pan.push_back(panid);
       sr.nd.trkmatch.extrap.push_back(track_match);
       sr.nd.trkmatch.nextrap += 1;
-      }
     }
 
     std::sort(possibleSPINEMatches.begin(),possibleSPINEMatches.end(),Track_match_sorter);
@@ -349,7 +348,7 @@ namespace cafmaker
       sr.nd.trkmatch.extrap.push_back(track_match);
       sr.nd.trkmatch.nextrap += 1;  
     }
-
+  }
   // todo: this is a placeholder
   std::deque<Trigger> NDLArTMSUniqueMatchRecoFiller::GetTriggers(int triggerType, bool beamOnly) const
   {
