@@ -291,8 +291,8 @@ namespace cafmaker
 
     std::sort(possiblePandoraMatches.begin(),possiblePandoraMatches.end(),Track_match_sorter);
 
-    std::vector<caf::SRNDLArID> matched_pan; 
-    std::vector<caf::SRTMSID> matched_tmspan; // stores LAr (Pandora) and TMS indices that have already been matched
+    std::vector<const caf::SRNDLArID> matched_pan; 
+    std::vector<const caf::SRTMSID> matched_tmspan; // stores LAr (Pandora) and TMS indices that have already been matched
 
     for (unsigned int match_idx = 0; match_idx < possiblePandoraMatches.size(); match_idx++) {
       caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
@@ -312,8 +312,8 @@ namespace cafmaker
 
     std::sort(possibleSPINEMatches.begin(),possibleSPINEMatches.end(),Track_match_sorter);
 
-    std::vector<caf::SRNDLArID> matched_dlp; 
-    std::vector<caf::SRTMSID> matched_tmsdlp; // stores LAr (SPINE) and TMS indices that have already been matched
+    std::vector<const caf::SRNDLArID> matched_dlp; 
+    std::vector<const caf::SRTMSID> matched_tmsdlp; // stores LAr (SPINE) and TMS indices that have already been matched
 
     for (unsigned int match_idx = 0; match_idx < possibleSPINEMatches.size(); match_idx++) {
       caf::SRNDTrackAssn track_match = possibleSPINEMatches[match_idx];
