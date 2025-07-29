@@ -103,14 +103,6 @@ namespace cafmaker
     double y_start = tms_track.start.y;
     double z_start = tms_track.start.z;
 
-    double x_end = tms_track.end.x;
-    double y_end = tms_track.end.y;
-    double z_end = tms_track.end.z;
-
-    double dir_x = tms_track.dir.x;
-    double dir_y = tms_track.dir.y;
-    double dir_z = tms_track.dir.z;
-
     if ((x_start > tms_x_lim1)&&(x_start < tms_x_lim2) &&
         (y_start > tms_y_lim1)&&(y_start < tms_y_lim2) &&
         (z_start > tms_z_lim1)&&(z_start < tms_z_lim1 + tms_z_cutoff) && // checks track begins within fiducial volume and close enough to front
@@ -134,10 +126,6 @@ namespace cafmaker
     double x_end = lar_track.end.x;
     double y_end = lar_track.end.y;
     double z_end = lar_track.end.z;
-
-    double dir_x = lar_track.enddir.x;
-    double dir_y = lar_track.enddir.y;
-    double dir_z = lar_track.enddir.z;
 
     if ((x_start > lar_x_lim1)&&(x_start < lar_x_lim2) &&
         (y_start > lar_y_lim1)&&(y_start < lar_y_lim2) &&
