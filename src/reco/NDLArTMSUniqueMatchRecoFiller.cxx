@@ -291,14 +291,28 @@ namespace cafmaker
       double score = track_match.matchScore;
       if (score > f_cut) {break;}
       caf::SRNDLArID panid = track_match.larid;
-      if (std::count(matched_pan.begin(),matched_pan.end(),panid) == 0) {
-        caf::SRTMSID tmsid = track_match.tmsid;
-        if (std::count(matched_tmspan.begin(),matched_tmspan.end(),tmsid) == 0) {
-          matched_tmspan.push_back(tmsid);
-          matched_pan.push_back(panid);
-          sr.nd.trkmatch.extrap.push_back(track_match);
-          sr.nd.trkmatch.nextrap += 1;
+      bool seen_lar = false;
+      for (seen_panid : matched_pan) {
+        if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
+          seen_lar = true;
+          break;
         }
+      }
+      if (seen_lar) {continue;}
+      caf::SRTMSID tmsid = track_match.tmsid;
+      bool seen_tms = false;
+      for (seen_tmsid : matched_tmspan) {
+        if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
+          seen_tms = true;
+          break;
+        }
+      }
+      if (seen_tms) {continue;}
+      
+      matched_tmspan.push_back(tmsid);
+      matched_pan.push_back(panid);
+      sr.nd.trkmatch.extrap.push_back(track_match);
+      sr.nd.trkmatch.nextrap += 1;
       }
     }
 
@@ -312,15 +326,28 @@ namespace cafmaker
       double score = track_match.matchScore;
       if (score > f_cut) {break;}
       caf::SRNDLArID dlpid = track_match.larid;
-      if (std::count(matched_dlp.begin(),matched_dlp.end(),dlpid) == 0) {
-        caf::SRTMSID tmsid = track_match.tmsid;
-        if (std::count(matched_tmsdlp.begin(),matched_tmsdlp.end(),tmsid) == 0) {
-          matched_tmsdlp.push_back(tmsid);
-          matched_dlp.push_back(dlpid);
-          sr.nd.trkmatch.extrap.push_back(track_match);
-          sr.nd.trkmatch.nextrap += 1;
+      bool seen_lar = false;
+      for (seen_dlpid : matched_dlp) {
+        if (seen_dlpid.ixn == dlpid.ixn && seen_dlpid.idx == dlpid.idx) {
+          seen_lar = true;
+          break;
         }
       }
+      if (seen_lar) {continue;}
+      caf::SRTMSID tmsid = track_match.tmsid;
+      bool seen_tms = false;
+      for (seen_tmsid : matched_tmsdlp) {
+        if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
+          seen_tms = true;
+          break;
+        }
+      }
+      if (seen_tms) {continue;}
+
+      matched_tmsdlp.push_back(tmsid);
+      matched_dlp.push_back(dlpid);
+      sr.nd.trkmatch.extrap.push_back(track_match);
+      sr.nd.trkmatch.nextrap += 1;  
     }
   }
 
