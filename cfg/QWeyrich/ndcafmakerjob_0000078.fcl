@@ -1,0 +1,8 @@
+#include "NDCAFMaker.fcl"
+
+nd_cafmaker: @local::standard_nd_cafmaker
+
+nd_cafmaker.CAFMakerSettings.InputGHEPFile: "/pnfs/dune/persistent/physicsgroups/dunendsim/abooth/nd-production/MicroProdN3p4/output/run-genie/MicroProdN3p4_NDLAr_2E18_FHC.genie.nu/GHEP/0000000/0000000/MicroProdN3p4_NDLAr_2E18_FHC.genie.nu.0000078.GHEP.root"
+nd_cafmaker.CAFMakerSettings.NDLArRecoFile: "/exp/dune/data/users/weyrich/RootFiles/0000078/LArRecoND0000078_all.root"
+nd_cafmaker.CAFMakerSettings.TMSRecoFile: "/exp/dune/app/users/weyrich/RootFiles/0000078/MicroProdN3p1_NDLAr_2E18_FHC.tmsreco.nu.0000078.TMSRECO.root"
+nd_cafmaker.CAFMakerSettings.OutputFile: "/exp/dune/data/users/weyrich/RootFiles/ND_CAFMaker/out_caf_0000078.root"
