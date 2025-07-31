@@ -53,7 +53,7 @@ namespace cafmaker
       TMSRecoTree->SetBranchAddress("StartDirection",        _TrackStartDirection);
       TMSRecoTree->SetBranchAddress("EndDirection",          _TrackEndDirection);
 
-      TMSLCTree->SetBranchAddress("TMSStartTime",            _TMSStartTime);
+      TMSLCTree->SetBranchAddress("TMSStartTime",            &_TMSStartTime);
     } else {
       fTMSRecoFile = NULL;
       TMSRecoTree  = NULL;
