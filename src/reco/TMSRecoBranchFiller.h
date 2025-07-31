@@ -42,6 +42,7 @@ namespace cafmaker
 
       TFile *fTMSRecoFile;
       TTree *TMSRecoTree;
+      TTree *TMSLCTree;
 
       // Save the branches that we're reading in
       int _nLines;
@@ -66,6 +67,8 @@ namespace cafmaker
       float _DirectionZ_Downstream[10];
       float _DirectionX_Upstream[10];
       float _DirectionZ_Upstream[10];
+
+      double _TMSStartTime;
 
       // [100][200][4] needs to match TMS reco output (check file if in doubt)
       float _TrackHitPos[100][200][4];

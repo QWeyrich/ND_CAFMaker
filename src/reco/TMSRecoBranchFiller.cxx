@@ -22,8 +22,14 @@ namespace cafmaker
 
       // Save pointer to input tree
       TMSRecoTree = dynamic_cast<TTree*>(fTMSRecoFile->Get("Reco_Tree"));
+      TMSLCTree = dynamic_cast<TTree*>(fTMSRecoFile->Get("Line_Candidates"));
       if (!TMSRecoTree) {
         std::cerr << "Did not find TMS reco tree Reco_Tree in input file " << tmsRecoFilename << std::endl;
+        std::cerr << "Are you sure this is a TMS reco file?" << std::endl;
+        throw;
+      }
+      if (!TMSLCTree) {
+        std::cerr << "Did not find TMS reco tree Line_Candidates in input file " << tmsRecoFilename << std::endl;
         std::cerr << "Are you sure this is a TMS reco file?" << std::endl;
         throw;
       }
@@ -46,9 +52,12 @@ namespace cafmaker
       TMSRecoTree->SetBranchAddress("EndPos",                _TrackEndPos);
       TMSRecoTree->SetBranchAddress("StartDirection",        _TrackStartDirection);
       TMSRecoTree->SetBranchAddress("EndDirection",          _TrackEndDirection);
+
+      TMSLCTree->SetBranchAddress("TMSStartTime",            _TMSStartTime);
     } else {
       fTMSRecoFile = NULL;
       TMSRecoTree  = NULL;
+      TMSLCTree = NULL;
       std::cerr << "The TMS reco file you provided: " << tmsRecoFilename 
                 << " appears to be a Zombie 🧟" << std::endl;
       throw;
@@ -58,9 +67,11 @@ namespace cafmaker
 
   TMSRecoBranchFiller::~TMSRecoBranchFiller() {
     delete TMSRecoTree;
+    delete TMSLCTree;
     fTMSRecoFile->Close();
     delete fTMSRecoFile;
     TMSRecoTree = NULL;
+    TMSLCTree = NULL;
     fTMSRecoFile = NULL;
   }
 
@@ -93,12 +104,14 @@ namespace cafmaker
 
     int LastSpillNo = -999999; //_SpillNo;
     TMSRecoTree->GetEntry(i); // Load first entry for now
+    TMSLCTree->GetEntry(i);
     LastSpillNo = _SpillNo;
 
     sr.nd.tms.ixn.emplace_back();
     caf::SRTMSInt& interaction = sr.nd.tms.ixn.back();
 
     interaction.ntracks = 0;
+    interaction.time = _TMSStartTime;
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i
