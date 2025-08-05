@@ -4,6 +4,6 @@ nd_cafmaker: @local::standard_nd_cafmaker
 
 nd_cafmaker.CAFMakerSettings.GHEPFiles: ["/pnfs/dune/persistent/physicsgroups/dunendsim/abooth/nd-production/MicroProdN3p4/output/run-genie/MicroProdN3p4_NDLAr_2E18_FHC.genie.nu/GHEP/0000000/0000100/MicroProdN3p4_NDLAr_2E18_FHC.genie.nu.0000104.GHEP.root"]
 nd_cafmaker.CAFMakerSettings.EdepsimFile: "/pnfs/dune/persistent/physicsgroups/dunendsim/abooth/nd-production/MicroProdN3p4/output/run-edep-sim/MicroProdN3p4_NDLAr_2E18_FHC.edep.nu/EDEPSIM/0000000/0000100/MicroProdN3p4_NDLAr_2E18_FHC.edep.nu.0000104.EDEPSIM.root"
-nd_cafmaker.CAFMakerSettings.PandoraLArRecoFile: "/exp/dune/data/users/weyrich/RootFiles/0000104/LArRecoND0000104_all.root"
+nd_cafmaker.CAFMakerSettings.PandoraLArRecoNDFile: "/exp/dune/data/users/weyrich/RootFiles/0000104/LArRecoND0000104_all.root"
 nd_cafmaker.CAFMakerSettings.TMSRecoFile: "/exp/dune/data/users/weyrich/RootFiles/0000104/MicroProdN3p1_NDLAr_2E18_FHC.tmsreco.nu.0000104.TMSRECO.root"
 nd_cafmaker.CAFMakerSettings.OutputFile: "/exp/dune/data/users/weyrich/RootFiles/ND_CAFMaker/out_caf_0000104.root"
