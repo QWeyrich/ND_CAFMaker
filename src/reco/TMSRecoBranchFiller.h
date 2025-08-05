@@ -68,7 +68,7 @@ namespace cafmaker
       float _DirectionX_Upstream[10];
       float _DirectionZ_Upstream[10];
 
-      double _TMSStartTime;
+      float _TMSStartTime;
 
       // [100][200][4] needs to match TMS reco output (check file if in doubt)
       float _TrackHitPos[100][200][4];
