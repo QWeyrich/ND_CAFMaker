@@ -15,7 +15,7 @@ namespace cafmaker
     }
   }
 
-  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double sigmaT, const double fCut)
+  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut)
     : IRecoBranchFiller("LArTMSMatcher")
   {
     sigma_x = sigmaX;
@@ -25,6 +25,7 @@ namespace cafmaker
     sigma_angle_x = sigmaThX;
     sigma_angle_y = sigmaThY;
     use_time = useTime;
+    mean_t = meanT;
     sigma_t = sigmaT;
     f_cut = fCut;
     // nothing to do
@@ -160,6 +161,7 @@ namespace cafmaker
     for (unsigned int ixn_tms = 0; ixn_tms < sr.nd.tms.nixn; ixn_tms++)
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];
+      float tms_time = tms_int.time;
       unsigned int n_tms_tracks = tms_int.ntracks;
 
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
@@ -202,8 +204,15 @@ namespace cafmaker
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
-              double delta_t = 0; // placeholder until time is added
-              fScore += pow(delta_t/sigma_t,2);
+              std::vector<float> t0 = pan_trk.truthOverlap;
+              std::vector<caf::TrueParticleID> truIDs = pan_trk.truth;
+              int idx_max = std::distance(t0.begin(),std::max_element(t0.begin(),t0.end()));
+              // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
+              caf::TrueParticleID partID = truIDs[idx_max];
+              float t1 = SRTruthBranch::Particle(partID).time;
+              float t2 = tms_int.time;
+              float delta_t = t1 - t2;
+              fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
         
             caf::SRTMSID tmsid;
@@ -256,8 +265,15 @@ namespace cafmaker
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
-              double delta_t = 0; // placeholder until time is added
-              fScore += pow(delta_t/sigma_t,2);
+              std::vector<float> t0 = dlp_trk.truthOverlap;
+              std::vector<caf::TrueParticleID> truIDs = dlp_trk.truth;
+              int idx_max = std::distance(t0.begin(),std::max_element(t0.begin(),t0.end()));
+              // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
+              caf::TrueParticleID partID = truIDs[idx_max];
+              float t1 = SRTruthBranch::Particle(partID).time;
+              float t2 = tms_int.time;
+              float delta_t = t1 - t2;
+              fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
         
             caf::SRTMSID tmsid;

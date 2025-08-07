@@ -66,6 +66,9 @@ namespace cafmaker
       std::vector<float> *m_dirXVect = nullptr;
       std::vector<float> *m_dirYVect = nullptr;
       std::vector<float> *m_dirZVect = nullptr;
+      std::vector<float> *m_endDirXVect = nullptr; //Added end direction temporarily in order to use a more sophisticated track fitting algorithm
+      std::vector<float> *m_endDirYVect = nullptr;
+      std::vector<float> *m_endDirZVect = nullptr;
       std::vector<float> *m_energyVect = nullptr;
       std::vector<int> *m_n3DHitsVect = nullptr;
       std::vector<long> *m_mcNuIdVect = nullptr;

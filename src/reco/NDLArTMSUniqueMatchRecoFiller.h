@@ -53,6 +53,7 @@ namespace cafmaker
       double sigma_angle_x;
       double sigma_angle_y;
       bool use_time;
+      double mean_t;
       double sigma_t;
       double f_cut;
 

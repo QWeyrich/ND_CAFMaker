@@ -109,9 +109,10 @@ namespace cafmaker
 
     sr.nd.tms.ixn.emplace_back();
     caf::SRTMSInt& interaction = sr.nd.tms.ixn.back();
+    sr.nd.tms.nixn += 1; //Make sure to update nixn
 
     interaction.ntracks = 0;
-    interaction.time = _TMSStartTime;
+    interaction.time = _TMSStartTime; //Adds time of interaction
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i

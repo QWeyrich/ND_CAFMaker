@@ -85,6 +85,7 @@ namespace cafmaker
     fhicl::Atom<double> sigmaThX { fhicl::Name("SigmaThetaX"), fhicl::Comment("Standard deviation of angle along x-axis between end of Pandora reco track and start of matching TMS reco track [deg]"), 7.9};
     fhicl::Atom<double> sigmaThY { fhicl::Name("SigmaThetaY"), fhicl::Comment("Standard deviation of angle along y-axis between end of Pandora reco track and start of matching TMS reco track [deg]"), 11.6};
     fhicl::Atom<bool> useTime { fhicl::Name("UseTime"), fhicl::Comment("Include time in track matching calculation"), false};
+    fhicl::Atom<double> meanT { fhicl::Name("MeanT"), fhicl::Comment("Average time difference between recorded Pandora reco track and matching TMS reco track [ns]"), -19.091};
     fhicl::Atom<double> sigmaT { fhicl::Name("SigmaT"), fhicl::Comment("Standard deviation of time difference between recorded Pandora reco track and matching TMS reco track [ns]"), 8.465};
     fhicl::Atom<double> fcut { fhicl::Name("fCut"), fhicl::Comment("Maximum permissible match score for the matching, (best choice depends on whether time is included)"), 5.25}; //with time: 59.67
 

@@ -38,15 +38,18 @@ namespace cafmaker
       m_LArRecoNDTree->SetBranchAddress("triggers", &m_triggerType);
       m_LArRecoNDTree->SetBranchAddress("isShower", &m_isShowerVect);
       m_LArRecoNDTree->SetBranchAddress("sliceId", &m_sliceIdVect);
-      m_LArRecoNDTree->SetBranchAddress("startX", &m_startXVect);
-      m_LArRecoNDTree->SetBranchAddress("startY", &m_startYVect);
-      m_LArRecoNDTree->SetBranchAddress("startZ", &m_startZVect);
-      m_LArRecoNDTree->SetBranchAddress("endX", &m_endXVect);
-      m_LArRecoNDTree->SetBranchAddress("endY", &m_endYVect);
-      m_LArRecoNDTree->SetBranchAddress("endZ", &m_endZVect);
-      m_LArRecoNDTree->SetBranchAddress("dirX", &m_dirXVect);
-      m_LArRecoNDTree->SetBranchAddress("dirY", &m_dirYVect);
-      m_LArRecoNDTree->SetBranchAddress("dirZ", &m_dirZVect);
+      m_LArRecoNDTree->SetBranchAddress("startXtrkfit", &m_startXVect);
+      m_LArRecoNDTree->SetBranchAddress("startYtrkfit", &m_startYVect);
+      m_LArRecoNDTree->SetBranchAddress("startZtrkfit", &m_startZVect);
+      m_LArRecoNDTree->SetBranchAddress("endXtrkfit", &m_endXVect);
+      m_LArRecoNDTree->SetBranchAddress("endYtrkfit", &m_endYVect);
+      m_LArRecoNDTree->SetBranchAddress("endZtrkfit", &m_endZVect);
+      m_LArRecoNDTree->SetBranchAddress("startPxtrkfit", &m_dirXVect);
+      m_LArRecoNDTree->SetBranchAddress("startPytrkfit", &m_dirYVect);
+      m_LArRecoNDTree->SetBranchAddress("startPztrkfit", &m_dirZVect);
+      m_LArRecoNDTree->SetBranchAddress("endPxtrkfit", &m_endDirXVect);
+      m_LArRecoNDTree->SetBranchAddress("endPytrkfit", &m_endDirYVect);
+      m_LArRecoNDTree->SetBranchAddress("endPztrkfit", &m_endDirZVect);
       m_LArRecoNDTree->SetBranchAddress("energy", &m_energyVect);
       m_LArRecoNDTree->SetBranchAddress("n3DHits", &m_n3DHitsVect);
       m_LArRecoNDTree->SetBranchAddress("mcNuId", &m_mcNuIdVect);
@@ -188,13 +191,21 @@ namespace cafmaker
       const caf::SRVector3D end{endX, endY, endZ};
       track.end = end;
 
-      // Principal axis direction
+      // Direction of start of track
       const float dirX = (m_dirXVect != nullptr) ? (*m_dirXVect)[i] : 0.0;
       const float dirY = (m_dirYVect != nullptr) ? (*m_dirYVect)[i] : 0.0;
       const float dirZ = (m_dirZVect != nullptr) ? (*m_dirZVect)[i] : 0.0;
-      const caf::SRVector3D dir{dirX, dirY, dirZ};
+      const float lenDir = sqrt(pow(dirX,2)+pow(dirY,2)+pow(dirZ,2)); // Normalize direction vector
+      const caf::SRVector3D dir = ((lenDir > 0) ? {dirX/lenDir, dirY/lenDir, dirZ/lenDir} : {0.0, 0.0, 0.0});
       track.dir = dir;
-      track.enddir = dir;
+
+      // Direction of end of track
+      const float endDirX = (m_endDirXVect != nullptr) ? (*m_endDirXVect)[i] : 0.0;
+      const float endDirY = (m_endDirYVect != nullptr) ? (*m_endDirYVect)[i] : 0.0;
+      const float endDirZ = (m_endDirZVect != nullptr) ? (*m_endDirZVect)[i] : 0.0;
+      const float lenEndDir = sqrt(pow(endDirX,2)+pow(endDirY,2)+pow(endDirZ,2)); // Normalize direction vector
+      const caf::SRVector3D endDir = ((lenEndDir > 0) ? {endDirX/lenEndDir, endDirY/lenEndDir, endDirZ/lenEndDir} : {0.0, 0.0, 0.0});
+      track.enddir = endDir;
 
       // Energy (GeV)
       const float energy = (m_energyVect != nullptr) ? (*m_energyVect)[i] : 0.0;
