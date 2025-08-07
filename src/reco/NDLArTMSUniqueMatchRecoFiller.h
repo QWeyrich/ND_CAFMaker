@@ -11,7 +11,7 @@
 #include "TMSRecoBranchFiller.h"
 
 #include "duneanaobj/StandardRecord/StandardRecord.h"
-#include "duneanaobj/StandardRecord/SRTruthBranch.h"
+#include "duneanaobj/StandardRecord/Navigate.h"
 #include "TMath.h"
 
 namespace cafmaker
