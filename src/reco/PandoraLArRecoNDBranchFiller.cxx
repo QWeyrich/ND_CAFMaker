@@ -198,10 +198,10 @@ namespace cafmaker
       const float lenDir = sqrt(pow(dirX,2)+pow(dirY,2)+pow(dirZ,2)); // Normalize direction vector
       const caf::SRVector 3D dir;
       if (lenDir > 0) {
-        dir = {dirX/lenDir, dirY/lenDir, dirZ/lenDir}
+        dir = {dirX/lenDir, dirY/lenDir, dirZ/lenDir};
       }
       else{
-        dir = {0.0, 0.0, 0.0}
+        dir = {0.0, 0.0, 0.0};
       }
       track.dir = dir;
 
