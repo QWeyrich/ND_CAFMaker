@@ -196,12 +196,9 @@ namespace cafmaker
       const float dirY = (m_dirYVect != nullptr) ? (*m_dirYVect)[i] : 0.0;
       const float dirZ = (m_dirZVect != nullptr) ? (*m_dirZVect)[i] : 0.0;
       const float lenDir = sqrt(pow(dirX,2)+pow(dirY,2)+pow(dirZ,2)); // Normalize direction vector
-      const caf::SRVector3D dir;
+      const caf::SRVector3D dir{0.0, 0.0, 0.0};
       if (lenDir > 0) {
         dir = {dirX/lenDir, dirY/lenDir, dirZ/lenDir};
-      }
-      else{
-        dir = {0.0, 0.0, 0.0};
       }
       track.dir = dir;
 
@@ -210,12 +207,9 @@ namespace cafmaker
       const float endDirY = (m_endDirYVect != nullptr) ? (*m_endDirYVect)[i] : 0.0;
       const float endDirZ = (m_endDirZVect != nullptr) ? (*m_endDirZVect)[i] : 0.0;
       const float lenEndDir = sqrt(pow(endDirX,2)+pow(endDirY,2)+pow(endDirZ,2)); // Normalize direction vector
-      const caf::SRVector3D endDir;
+      const caf::SRVector3D endDir{0.0,0.0,0.0};
       if (lenEndDir > 0) {
         endDir = {endDirX/lenEndDir, endDirY/lenEndDir, endDirZ/lenEndDir};
-      }
-      else{
-        endDir = {0.0, 0.0, 0.0};
       }
       track.enddir = endDir;
 
