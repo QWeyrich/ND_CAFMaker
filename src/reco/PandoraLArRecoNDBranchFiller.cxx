@@ -212,10 +212,10 @@ namespace cafmaker
       const float lenEndDir = sqrt(pow(endDirX,2)+pow(endDirY,2)+pow(endDirZ,2)); // Normalize direction vector
       const caf::SRVector3D endDir;
       if (lenEndDir > 0) {
-        endDir = {endDirX/lenEndDir, endDirY/lenEndDir, endDirZ/lenEndDir}
+        endDir = {endDirX/lenEndDir, endDirY/lenEndDir, endDirZ/lenEndDir};
       }
       else{
-        endDir = {0.0, 0.0, 0.0}
+        endDir = {0.0, 0.0, 0.0};
       }
       track.enddir = endDir;
 
