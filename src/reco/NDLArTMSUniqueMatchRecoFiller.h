@@ -11,6 +11,7 @@
 #include "TMSRecoBranchFiller.h"
 
 #include "duneanaobj/StandardRecord/StandardRecord.h"
+#include "duneanaobj/StandardRecord/SRTruthBranch.h"
 #include "TMath.h"
 
 namespace cafmaker
@@ -20,7 +21,7 @@ namespace cafmaker
   class NDLArTMSUniqueMatchRecoFiller : public cafmaker::IRecoBranchFiller
   {
     public:
-      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double sigmaT, const double fCut);
+      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut);
 
       std::vector<double> Project_track(const caf::SRTrack track, const bool forward) const;
 

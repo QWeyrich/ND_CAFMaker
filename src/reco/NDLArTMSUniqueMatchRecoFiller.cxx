@@ -1,5 +1,6 @@
 #include "NDLArTMSUniqueMatchRecoFiller.h"
 #include <cmath>
+#include "duneanaobj/StandardRecord/SRTruthBranch.h"
 
 namespace cafmaker
 {
