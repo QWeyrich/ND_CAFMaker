@@ -209,7 +209,7 @@ namespace cafmaker
               int idx_max = std::distance(t0.begin(),std::max_element(t0.begin(),t0.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
               caf::TrueParticleID partID = truIDs[idx_max];
-              float lar_time = sr.mc.Particle(partID)->time();
+              float lar_time = sr.mc.Particle(partID)->time;
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
@@ -269,7 +269,7 @@ namespace cafmaker
               int idx_max = std::distance(t0.begin(),std::max_element(t0.begin(),t0.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
               caf::TrueParticleID partID = truIDs[idx_max];
-              float lar_time = sr.mc.Particle(partID)->time();
+              float lar_time = sr.mc.Particle(partID)->time;
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
