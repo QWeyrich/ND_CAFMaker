@@ -403,8 +403,8 @@ namespace cafmaker
       LOG.VERBOSE() << "    creating new SRTrueInteraction.  Trying to match to a GENIE event...\n";
 
       // todo: should this logic live somewhere else?
-      unsigned int evtNum = ixnID % 10000000;
-      unsigned long runNum = (ixnID - evtNum) / 10000000;
+      unsigned int evtNum = ixnID % 1000000;
+      unsigned long runNum = (ixnID - evtNum) / 1000000;
 
       if (HaveGENIE())
       {
