@@ -196,7 +196,7 @@ namespace cafmaker
       const float dirY = (m_dirYVect != nullptr) ? (*m_dirYVect)[i] : 0.0;
       const float dirZ = (m_dirZVect != nullptr) ? (*m_dirZVect)[i] : 0.0;
       const float lenDir = sqrt(pow(dirX,2)+pow(dirY,2)+pow(dirZ,2)); // Normalize direction vector
-      const caf::SRVector3D dir = ((lenDir > 0) ? {dirX/lenDir, dirY/lenDir, dirZ/lenDir} : {0.0, 0.0, 0.0});
+      const caf::SRVector3D dir = (lenDir > 0) ? {dirX/lenDir, dirY/lenDir, dirZ/lenDir} : {0.0, 0.0, 0.0};
       track.dir = dir;
 
       // Direction of end of track
@@ -204,7 +204,7 @@ namespace cafmaker
       const float endDirY = (m_endDirYVect != nullptr) ? (*m_endDirYVect)[i] : 0.0;
       const float endDirZ = (m_endDirZVect != nullptr) ? (*m_endDirZVect)[i] : 0.0;
       const float lenEndDir = sqrt(pow(endDirX,2)+pow(endDirY,2)+pow(endDirZ,2)); // Normalize direction vector
-      const caf::SRVector3D endDir = ((lenEndDir > 0) ? {endDirX/lenEndDir, endDirY/lenEndDir, endDirZ/lenEndDir} : {0.0, 0.0, 0.0});
+      const caf::SRVector3D endDir = (lenEndDir > 0) ? {endDirX/lenEndDir, endDirY/lenEndDir, endDirZ/lenEndDir} : {0.0, 0.0, 0.0};
       track.enddir = endDir;
 
       // Energy (GeV)
