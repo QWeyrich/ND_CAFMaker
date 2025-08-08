@@ -113,6 +113,7 @@ namespace cafmaker
 
     interaction.ntracks = 0;
     interaction.time = _TMSStartTime; //Adds time of interaction
+    std::cout << "TMS time " << interaction.time << std::endl;
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i
