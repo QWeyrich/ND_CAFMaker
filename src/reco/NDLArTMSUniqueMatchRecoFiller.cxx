@@ -161,12 +161,12 @@ namespace cafmaker
     for (unsigned int ixn_tms = 0; ixn_tms < sr.nd.tms.nixn; ixn_tms++)
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];
-      float tms_time = tms_int.time;
       unsigned int n_tms_tracks = tms_int.ntracks;
 
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
         caf::SRTrack tms_trk = tms_int.tracks[itms];
+        float tms_time = tms_trk.time;
 
         if (!Consider_TMS_track(tms_trk,tms_z_cutoff)) {
           continue; //skips the tms track if it isn't suitable according to the function
@@ -204,9 +204,9 @@ namespace cafmaker
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
-              std::vector<float> t0 = pan_trk.truthOverlap;
+              std::vector<float> tO = pan_trk.truthOverlap;
               std::vector<caf::TrueParticleID> truIDs = pan_trk.truth;
-              int idx_max = std::distance(t0.begin(),std::max_element(t0.begin(),t0.end()));
+              int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
               caf::TrueParticleID partID = truIDs[idx_max];
               float lar_time = sr.mc.Particle(partID)->time;
@@ -264,9 +264,9 @@ namespace cafmaker
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
-              std::vector<float> t0 = dlp_trk.truthOverlap;
+              std::vector<float> tO = dlp_trk.truthOverlap;
               std::vector<caf::TrueParticleID> truIDs = dlp_trk.truth;
-              int idx_max = std::distance(t0.begin(),std::max_element(t0.begin(),t0.end()));
+              int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
               caf::TrueParticleID partID = truIDs[idx_max];
               float lar_time = sr.mc.Particle(partID)->time;

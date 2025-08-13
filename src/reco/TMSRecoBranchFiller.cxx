@@ -112,8 +112,6 @@ namespace cafmaker
     sr.nd.tms.nixn += 1; //Make sure to update nixn
 
     interaction.ntracks = 0;
-    interaction.time = _TMSStartTime; //Adds time of interaction
-    std::cout << "TMS time " << interaction.time << std::endl;
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i
@@ -128,6 +126,8 @@ namespace cafmaker
           interaction.tracks[j].end     = caf::SRVector3D(_TrackEndPos[j][0]/10., _TrackEndPos[j][1]/10., _TrackEndPos[j][2]/10.);
           interaction.tracks[j].dir     = caf::SRVector3D(_TrackStartDirection[j][0], _TrackStartDirection[j][1] , _TrackStartDirection[j][2]);
           interaction.tracks[j].enddir  = caf::SRVector3D(_TrackEndDirection[j][0], _TrackEndDirection[j][1] , _TrackEndDirection[j][2]);
+          interaction.tracks[j].time    = _TMSStartTime; //Adds time of interaction
+          std::cout << "TMS time " << interaction.time << std::endl;
 
           // Calculate length by summing up the distances from the kalman reco positions
 //          double tmpLength_cm = 0.0;
