@@ -157,7 +157,7 @@ namespace cafmaker
 
     double tms_z_cutoff = 10;
     double lar_z_cutoff = 10; // tracks must overlap last/first 10 cm of the detectors
-
+    std::cout << "I'm running the matching code on " << sr.nd.tms.nixn << std::endl;
     for (unsigned int ixn_tms = 0; ixn_tms < sr.nd.tms.nixn; ixn_tms++)
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];

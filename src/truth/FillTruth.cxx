@@ -529,7 +529,7 @@ namespace cafmaker
     auto p0 = traj.Points[0];
     part.start_pos = (p0.Position * .1).Vect();
     part.time = p0.Position.T();
-    std::cout << "Particle time: " << part.time std::endl;
+    std::cout << "Particle time: " << part.time << std::endl;
 
     auto pf = traj.Points[traj.Points.size()-1];
     part.end_pos = (pf.Position * .1).Vect();

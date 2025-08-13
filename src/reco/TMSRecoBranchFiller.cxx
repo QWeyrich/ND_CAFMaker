@@ -117,6 +117,8 @@ namespace cafmaker
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i
+      TMSLCTree->GetEntry(i);
+      std::cout << "TMS time " << _TMSStartTime << std::endl;
       if (_nTracks > 0)
       {
         interaction.tracks.resize(_nTracks + interaction.tracks.size());
