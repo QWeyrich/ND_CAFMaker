@@ -166,7 +166,7 @@ std::vector<std::unique_ptr<cafmaker::IRecoBranchFiller>> getRecoFillers(const c
   }
 
   // if we did both ND-LAr and TMS, we should try to match them, too
-  if (!ndlarFile.empty() && !tmsFile.empty())
+  if ((!ndlarFile.empty() || !pandoraFile.empty()) && !tmsFile.empty())
   {
     //recoFillers.emplace_back(std::make_unique<cafmaker::NDLArTMSMatchRecoFiller>());
     recoFillers.emplace_back(std::make_unique<cafmaker::NDLArTMSUniqueMatchRecoFiller>(par().cafmaker().sigmaX(), 
