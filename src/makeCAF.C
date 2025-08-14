@@ -166,6 +166,7 @@ std::vector<std::unique_ptr<cafmaker::IRecoBranchFiller>> getRecoFillers(const c
   }
 
   // if we did both ND-LAr and TMS, we should try to match them, too
+  /*
   if ((!ndlarFile.empty() || !pandoraFile.empty()) && !tmsFile.empty())
   {
     //recoFillers.emplace_back(std::make_unique<cafmaker::NDLArTMSMatchRecoFiller>());
@@ -182,6 +183,7 @@ std::vector<std::unique_ptr<cafmaker::IRecoBranchFiller>> getRecoFillers(const c
     std::cout << "   ND-LAr + TMS matching\n";
   }
 
+  */
   if (!ndlarFile.empty() && !minervaFile.empty())
   {
     recoFillers.emplace_back(std::make_unique<cafmaker::NDLArMINERvAMatchRecoFiller>(par().cafmaker().trackMatchExtrapolatedZ(), par().cafmaker().trackMatchdX(), par().cafmaker().trackMatchdY(), par().cafmaker().trackMatchdThetaX(), par().cafmaker().trackMatchdThetaY()));
