@@ -112,6 +112,7 @@ namespace cafmaker
     sr.nd.tms.nixn += 1; //Make sure to update nixn
 
     interaction.ntracks = 0;
+    std::cout << "About to enter while loop\n";
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSLCTree->GetEntry(i);
