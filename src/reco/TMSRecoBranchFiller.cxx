@@ -116,7 +116,7 @@ namespace cafmaker
     {
       TMSLCTree->GetEntry(i);
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i
-      std::cout << "TMS time " << _TMSStartTime << std::endl;
+      std::cout << "1st TMS time " << _TMSStartTime << std::endl;
       if (_nTracks > 0)
       {
         interaction.tracks.resize(_nTracks + interaction.tracks.size());
@@ -127,7 +127,7 @@ namespace cafmaker
           interaction.tracks[j].dir     = caf::SRVector3D(_TrackStartDirection[j][0], _TrackStartDirection[j][1] , _TrackStartDirection[j][2]);
           interaction.tracks[j].enddir  = caf::SRVector3D(_TrackEndDirection[j][0], _TrackEndDirection[j][1] , _TrackEndDirection[j][2]);
           interaction.tracks[j].time    = _TMSStartTime; //Adds time of interaction
-          std::cout << "TMS time " << interaction.tracks[j].time << std::endl;
+          std::cout << "2nd TMS time " << interaction.tracks[j].time << std::endl;
 
           // Calculate length by summing up the distances from the kalman reco positions
 //          double tmpLength_cm = 0.0;
@@ -141,9 +141,12 @@ namespace cafmaker
           interaction.tracks[j].len_gcm2  = (_TrackLength[j]>0.0) ? _TrackLength[j]/10. : 0.0; // idk why we have negatives
           interaction.tracks[j].qual      = _Occupancy[j]; // TODO: Apparently this is a "track quality", nominally (hits in track)/(total hits)
           interaction.tracks[j].Evis      = _TrackEnergyDeposit[j];
+
         }
       }
     }
+
+    std::cout << "Done filling TMS info for spill " << LastSpillNo << std::endl;
   }
 
 
