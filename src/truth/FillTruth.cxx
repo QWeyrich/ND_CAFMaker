@@ -486,7 +486,7 @@ namespace cafmaker
 
   int TruthMatcher::FillParticle(caf::SRTrueInteraction &ixn, std::size_t nixn, int G4ID, std::vector<caf::SRTrueParticle> & collection, int & counter, const TG4Event * g4event)
   {
-
+    std::cout << "Trying to run FillParticle\n";
     collection.emplace_back();
     int part_index = counter;
     counter++;
