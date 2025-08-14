@@ -166,7 +166,9 @@ namespace cafmaker
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
         caf::SRTrack tms_trk = tms_int.tracks[itms];
+        std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
         float tms_time = tms_trk.time;
+        std::cout << "TMS Time: " << tms_time << std::endl;
 
         if (!Consider_TMS_track(tms_trk,tms_z_cutoff)) {
           continue; //skips the tms track if it isn't suitable according to the function
@@ -180,7 +182,6 @@ namespace cafmaker
           for (unsigned int ipan = 0; ipan < n_pan_tracks; ipan++)
           {
             caf::SRTrack pan_trk = pan_int.tracks[ipan];
-            std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
             std::cout << "Pandora Start X: " << pan_trk.start.x << " Pandora Start X Dir: " << pan_trk.dir.x<< std::endl;
             
 
