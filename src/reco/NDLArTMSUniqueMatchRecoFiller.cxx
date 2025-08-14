@@ -213,7 +213,7 @@ namespace cafmaker
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
-            std::cout << "Match score = " << sqrt(fScore) << std::endl;
+            std::cout << "Match score = " << fScore << std::endl;
             std::cout << "fCut = " << f_cut << std::endl;
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
@@ -226,7 +226,7 @@ namespace cafmaker
             caf::SRNDTrackAssn potential_match;
             potential_match.tmsid = tmsid;
             potential_match.larid = panid;
-            potential_match.matchScore = sqrt(fScore);
+            potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
             potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end());
 
@@ -274,7 +274,7 @@ namespace cafmaker
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
-            std::cout << "Match score = " << sqrt(fScore) << std::endl;
+            std::cout << "Match score = " << fScore << std::endl;
             std::cout << "fCut = " << f_cut << std::endl;
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
@@ -287,7 +287,7 @@ namespace cafmaker
             caf::SRNDTrackAssn potential_match;
             potential_match.tmsid = tmsid;
             potential_match.larid = dlpid;
-            potential_match.matchScore = sqrt(fScore);
+            potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
             potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end());
 
