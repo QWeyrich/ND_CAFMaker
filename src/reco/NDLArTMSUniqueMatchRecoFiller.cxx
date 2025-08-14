@@ -213,7 +213,8 @@ namespace cafmaker
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
-        
+            std::cout << "Match score = " << sqrt(fScore) << std::endl;
+            std::cout << "fCut = " << f_cut << std::endl;
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
             tmsid.idx = itms;
@@ -273,7 +274,8 @@ namespace cafmaker
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
-        
+            std::cout << "Match score = " << sqrt(fScore) << std::endl;
+            std::cout << "fCut = " << f_cut << std::endl;
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
             tmsid.idx = itms;
