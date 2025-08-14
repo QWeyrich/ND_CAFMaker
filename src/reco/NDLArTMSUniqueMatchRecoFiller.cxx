@@ -180,6 +180,9 @@ namespace cafmaker
           for (unsigned int ipan = 0; ipan < n_pan_tracks; ipan++)
           {
             caf::SRTrack pan_trk = pan_int.tracks[ipan];
+            std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x; << std::endl;
+            std::cout << "Pandora Start X: " << pan_trk.start.x << " Pandora Start X Dir: " << pan_trk.dir.x; << std::endl;
+            
 
             if (!Consider_LAr_track(pan_trk,lar_z_cutoff)) {
               continue; //skips the lar track if it isn't suitable according to the function
@@ -204,14 +207,19 @@ namespace cafmaker
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
+              std::cout << "Using time" << std::endl;
               std::vector<float> tO = pan_trk.truthOverlap;
               std::vector<caf::TrueParticleID> truIDs = pan_trk.truth;
               int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
               caf::TrueParticleID partID = truIDs[idx_max];
+              std::cout << "Found true particle ID" << std::endl;
               float lar_time = sr.mc.Particle(partID)->time;
+              std::cout << "LAr time: " << lar_time << std::endl;
               float delta_t = lar_time - tms_time;
+              std::cout << "Delta t: " << delta_t << std::endl;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
+              std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
             }
             std::cout << "Match score = " << fScore << std::endl;
             std::cout << "fCut = " << f_cut << std::endl;
