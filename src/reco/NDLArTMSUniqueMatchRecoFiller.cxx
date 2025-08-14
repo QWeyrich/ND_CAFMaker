@@ -180,8 +180,8 @@ namespace cafmaker
           for (unsigned int ipan = 0; ipan < n_pan_tracks; ipan++)
           {
             caf::SRTrack pan_trk = pan_int.tracks[ipan];
-            std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x; << std::endl;
-            std::cout << "Pandora Start X: " << pan_trk.start.x << " Pandora Start X Dir: " << pan_trk.dir.x; << std::endl;
+            std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
+            std::cout << "Pandora Start X: " << pan_trk.start.x << " Pandora Start X Dir: " << pan_trk.dir.x<< std::endl;
             
 
             if (!Consider_LAr_track(pan_trk,lar_z_cutoff)) {
