@@ -213,7 +213,12 @@ namespace cafmaker
               std::vector<caf::TrueParticleID> truIDs = pan_trk.truth;
               int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
+              std::cout << "idx_max " << idx_max <<std::endl;
+              std::cout << "Size of truIDs " << truIDs.size() << std::endl;
               caf::TrueParticleID partID = truIDs[idx_max];
+              std::cout << "Particle type: " << partID.type << std::endl;
+              std::cout << "Particle ixn: " << partID.ixn << std::endl;
+              std::cout << "Particle idx: " << partID.part << std::endl;
               std::cout << "Found true particle ID" << std::endl;
               float lar_time = sr.mc.Particle(partID)->time;
               std::cout << "LAr time: " << lar_time << std::endl;
