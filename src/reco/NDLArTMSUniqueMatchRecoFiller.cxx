@@ -347,7 +347,7 @@ namespace cafmaker
       }
     }
     else {
-      std::cout << "possiblePandoraMatches is empty. Did you expect that?\n"
+      std::cout << "possiblePandoraMatches is empty. Did you expect that?\n";
     }
 
     if (possibleSPINEMatches.size() > 0) {
@@ -386,7 +386,7 @@ namespace cafmaker
       }
     }
     else {
-      std::cout << "possibleSPINEMatches is empty. Did you expect that?\n"
+      std::cout << "possibleSPINEMatches is empty. Did you expect that?\n";
     }
   }
   // todo: this is a placeholder
