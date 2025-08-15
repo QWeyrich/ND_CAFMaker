@@ -528,7 +528,7 @@ namespace cafmaker
       for (int entry = 0; entry < nEvents; entry++)
       {
         m_LArRecoNDTree->GetEntry(entry);
-
+        m_triggerType = 0; //for validation only
         if ((triggerType >= 0 && m_triggerType != triggerType) || (beamOnly && !IsBeamTrigger(m_triggerType))) // skip if not the right type
         {
           LOG.VERBOSE() << "    skipping trigger ID=" << m_triggerType << "\n";
@@ -543,7 +543,7 @@ namespace cafmaker
         // Event number
         trig.evtID = m_eventId;
 
-        trig.triggerType = m_triggerType;
+        trig.triggerType = 0; // for validation only //m_triggerType;
         // unix_ts trigger time (seconds)
         trig.triggerTime_s = m_unixTime;
         trig.triggerTime_ns = m_startTime * 100; 
