@@ -528,10 +528,11 @@ namespace cafmaker
       for (int entry = 0; entry < nEvents; entry++)
       {
         m_LArRecoNDTree->GetEntry(entry);
-        m_triggerType = 0; //for validation only
-        if ((triggerType >= 0 && m_triggerType != triggerType) || (beamOnly && !IsBeamTrigger(m_triggerType))) // skip if not the right type
-        {
-          LOG.VERBOSE() << "    skipping trigger ID=" << m_triggerType << "\n";
+        // 0s below should also be m_triggerType
+        if ((triggerType >= 0 && 0 != triggerType) || (beamOnly && !IsBeamTrigger(0))) // skip if not the right type
+        //                       ^ here                                           ^ and here
+        { //                                             v also here
+          LOG.VERBOSE() << "    skipping trigger ID=" << 0 << "\n";
           continue;
         }
 
