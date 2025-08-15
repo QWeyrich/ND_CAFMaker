@@ -442,6 +442,10 @@ void loop(CAF &caf,
     // hand off to the correct reco filler(s).
     for (const auto & fillerTrigPair : groupedTriggers[ii])
     {
+      std::cout << "Event ID: " << fillerTrigPair.second.evtID << std::endl;
+        std::cout << "Trigger Type: " << fillerTrigPair.second.triggerType << std::endl;
+        std::cout << "Time [s]: " << fillerTrigPair.second.triggerTime_s << std::endl;
+        std::cout << "Time [ns]: " << fillerTrigPair.second.triggerTime_ns << std::endl;
       cafmaker::LOG_S("loop()").INFO() << "Global trigger idx : " << ii << ", reco filler: '" << fillerTrigPair.first->GetName() << "', reco trigger eventID: " << fillerTrigPair.second.evtID << "\n";
       fillerTrigPair.first->FillRecoBranches(fillerTrigPair.second, caf.sr, par, &truthMatcher);
     }
@@ -451,10 +455,6 @@ void loop(CAF &caf,
     {
       if (filler->FillerType() == cafmaker::RecoFillerType::Matcher)
       {
-        std::cout << "Event ID: " << groupedTriggers[ii][0].second.evtID << std::endl;
-        std::cout << "Trigger Type: " << groupedTriggers[ii][0].second.triggerType << std::endl;
-        std::cout << "Time [s]: " << groupedTriggers[ii][0].second.triggerTime_s << std::endl;
-        std::cout << "Time [ns]: " << groupedTriggers[ii][0].second.triggerTime_ns << std::endl;
         filler->FillRecoBranches(groupedTriggers[ii][0].second, caf.sr, par, &truthMatcher);
       }
     }
