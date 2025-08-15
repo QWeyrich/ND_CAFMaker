@@ -171,6 +171,7 @@ namespace cafmaker
         std::cout << "TMS Time: " << tms_time << std::endl;
 
         if (!Consider_TMS_track(tms_trk,tms_z_cutoff)) {
+          std::cout << "Not considering this track, skipping" << std::endl;
           continue; //skips the tms track if it isn't suitable according to the function
         }
 
@@ -310,73 +311,82 @@ namespace cafmaker
         }
       }
     }
+    if (possiblePandoraMatches.size() > 0) {
+      std::sort(possiblePandoraMatches.begin(),possiblePandoraMatches.end(),Track_match_sorter);
 
-    std::sort(possiblePandoraMatches.begin(),possiblePandoraMatches.end(),Track_match_sorter);
+      std::vector<caf::SRNDLArID> matched_pan; 
+      std::vector<caf::SRTMSID> matched_tmspan; // stores LAr (Pandora) and TMS indices that have already been matched
 
-    std::vector<caf::SRNDLArID> matched_pan; 
-    std::vector<caf::SRTMSID> matched_tmspan; // stores LAr (Pandora) and TMS indices that have already been matched
-
-    for (unsigned int match_idx = 0; match_idx < possiblePandoraMatches.size(); match_idx++) {
-      caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
-      double score = track_match.matchScore;
-      if (score > f_cut) {break;}
-      caf::SRNDLArID panid = track_match.larid;
-      bool seen_lar = false;
-      for (auto const seen_panid : matched_pan) {
-        if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
-          seen_lar = true;
-          break;
+      for (unsigned int match_idx = 0; match_idx < possiblePandoraMatches.size(); match_idx++) {
+        caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
+        double score = track_match.matchScore;
+        if (score > f_cut) {break;}
+        caf::SRNDLArID panid = track_match.larid;
+        bool seen_lar = false;
+        for (auto const seen_panid : matched_pan) {
+          if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
+            seen_lar = true;
+            break;
+          }
         }
-      }
-      if (seen_lar) {continue;}
-      caf::SRTMSID tmsid = track_match.tmsid;
-      bool seen_tms = false;
-      for (auto const seen_tmsid : matched_tmspan) {
-        if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
-          seen_tms = true;
-          break;
+        if (seen_lar) {continue;}
+        caf::SRTMSID tmsid = track_match.tmsid;
+        bool seen_tms = false;
+        for (auto const seen_tmsid : matched_tmspan) {
+          if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
+            seen_tms = true;
+            break;
+          }
         }
+        if (seen_tms) {continue;}
+        
+        matched_tmspan.push_back(tmsid);
+        matched_pan.push_back(panid);
+        sr.nd.trkmatch.extrap.push_back(track_match);
+        sr.nd.trkmatch.nextrap += 1;
       }
-      if (seen_tms) {continue;}
-      
-      matched_tmspan.push_back(tmsid);
-      matched_pan.push_back(panid);
-      sr.nd.trkmatch.extrap.push_back(track_match);
-      sr.nd.trkmatch.nextrap += 1;
+    }
+    else {
+      std::cout << "possiblePandoraMatches is empty. Did you expect that?\n"
     }
 
-    std::sort(possibleSPINEMatches.begin(),possibleSPINEMatches.end(),Track_match_sorter);
+    if (possibleSPINEMatches.size() > 0) {
+      std::sort(possibleSPINEMatches.begin(),possibleSPINEMatches.end(),Track_match_sorter);
 
-    std::vector<caf::SRNDLArID> matched_dlp; 
-    std::vector<caf::SRTMSID> matched_tmsdlp; // stores LAr (SPINE) and TMS indices that have already been matched
+      std::vector<caf::SRNDLArID> matched_dlp; 
+      std::vector<caf::SRTMSID> matched_tmsdlp; // stores LAr (SPINE) and TMS indices that have already been matched
 
-    for (unsigned int match_idx = 0; match_idx < possibleSPINEMatches.size(); match_idx++) {
-      caf::SRNDTrackAssn track_match = possibleSPINEMatches[match_idx];
-      double score = track_match.matchScore;
-      if (score > f_cut) {break;}
-      caf::SRNDLArID dlpid = track_match.larid;
-      bool seen_lar = false;
-      for (auto const seen_dlpid : matched_dlp) {
-        if (seen_dlpid.ixn == dlpid.ixn && seen_dlpid.idx == dlpid.idx) {
-          seen_lar = true;
-          break;
+      for (unsigned int match_idx = 0; match_idx < possibleSPINEMatches.size(); match_idx++) {
+        caf::SRNDTrackAssn track_match = possibleSPINEMatches[match_idx];
+        double score = track_match.matchScore;
+        if (score > f_cut) {break;}
+        caf::SRNDLArID dlpid = track_match.larid;
+        bool seen_lar = false;
+        for (auto const seen_dlpid : matched_dlp) {
+          if (seen_dlpid.ixn == dlpid.ixn && seen_dlpid.idx == dlpid.idx) {
+            seen_lar = true;
+            break;
+          }
         }
-      }
-      if (seen_lar) {continue;}
-      caf::SRTMSID tmsid = track_match.tmsid;
-      bool seen_tms = false;
-      for (auto const seen_tmsid : matched_tmsdlp) {
-        if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
-          seen_tms = true;
-          break;
+        if (seen_lar) {continue;}
+        caf::SRTMSID tmsid = track_match.tmsid;
+        bool seen_tms = false;
+        for (auto const seen_tmsid : matched_tmsdlp) {
+          if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
+            seen_tms = true;
+            break;
+          }
         }
-      }
-      if (seen_tms) {continue;}
+        if (seen_tms) {continue;}
 
-      matched_tmsdlp.push_back(tmsid);
-      matched_dlp.push_back(dlpid);
-      sr.nd.trkmatch.extrap.push_back(track_match);
-      sr.nd.trkmatch.nextrap += 1;  
+        matched_tmsdlp.push_back(tmsid);
+        matched_dlp.push_back(dlpid);
+        sr.nd.trkmatch.extrap.push_back(track_match);
+        sr.nd.trkmatch.nextrap += 1;  
+      }
+    }
+    else {
+      std::cout << "possibleSPINEMatches is empty. Did you expect that?\n"
     }
   }
   // todo: this is a placeholder

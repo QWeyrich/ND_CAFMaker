@@ -73,6 +73,7 @@ namespace cafmaker
                                                        const cafmaker::Params &par,
                                                        const TruthMatcher *truthMatch) const
   {
+    std::cout << "Running Pandora filler" << std::endl;
     // Figure out where in our list of triggers this event index is.
     // We should always be looking forwards, since we expect to be traversing in that direction
     auto it_start = (m_LastTriggerReqd == m_Triggers.end()) ? m_Triggers.cbegin() : m_LastTriggerReqd;
@@ -152,6 +153,8 @@ namespace cafmaker
     sr.common.ixn.npandora = nNeutrinos;
     for (auto interaction : nuInteractions)
       sr.common.ixn.pandora.emplace_back(std::move(interaction));
+
+    std::cout << "Number of Pandora slices " << sr.nd.lar.npandora << std::endl;
   }
 
   // ------------------------------------------------------------------------------
