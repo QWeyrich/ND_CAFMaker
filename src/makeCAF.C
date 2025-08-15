@@ -451,6 +451,10 @@ void loop(CAF &caf,
     {
       if (filler->FillerType() == cafmaker::RecoFillerType::Matcher)
       {
+        std::cout << "Event ID: " << groupedTriggers[ii][0].second.evtID << std::endl;
+        std::cout << "Trigger Type: " << groupedTriggers[ii][0].second.triggerType << std::endl;
+        std::cout << "Time [s]: " << groupedTriggers[ii][0].second.triggerTime_s << std::endl;
+        std::cout << "Time [ns]: " << groupedTriggers[ii][0].second.triggerTime_ns << std::endl;
         filler->FillRecoBranches(groupedTriggers[ii][0].second, caf.sr, par, &truthMatcher);
       }
     }
