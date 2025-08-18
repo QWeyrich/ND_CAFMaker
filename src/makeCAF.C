@@ -436,6 +436,7 @@ void loop(CAF &caf,
       cafmaker::LOG_S("loop()").INFO() << "Processing trigger: " << ii << "\n";
 
     // reset (the default constructor initializes its variables)
+    std::cout << "About to run setToBS\n";
     caf.setToBS();
 
     std::cout << groupedTriggers.size() << std::endl;
