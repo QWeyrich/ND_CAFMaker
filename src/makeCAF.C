@@ -464,13 +464,13 @@ void loop(CAF &caf,
     if (useIFBeam)
     {
         pot = beamManager.getPOT(par, groupedTriggers[ii], ii);
-        std::cout << "Filled POT (useIFBeam true)\n"
+        std::cout << "Filled POT (useIFBeam true)\n";
     }
     else
     {
 	pot = par().runInfo().POTPerSpill() * 1e13;
         caf.sr.beam.ismc = true;
-        std::cout << "Filled POT (useIFBeam false)\n"
+        std::cout << "Filled POT (useIFBeam false)\n";
     }
     if (std::isnan(caf.pot))
       caf.pot = 0;
@@ -483,7 +483,7 @@ void loop(CAF &caf,
   // set other metadata
   caf.meta_run = par().runInfo().run();
   caf.meta_subrun = par().runInfo().subrun();
-  std::cout << "Finished loop\n"
+  std::cout << "Finished loop\n";
 }
 
 // -------------------------------------------------
@@ -510,7 +510,7 @@ int main( int argc, char const *argv[] )
   caf.version = 5;
   printf( "Run %d POT %g\n", caf.meta_run, caf.pot );
   caf.fillPOT();
-  std::cout << "caf.fillPOT executed\n"
+  std::cout << "caf.fillPOT executed\n";
 
   std::cout << "Writing CAF" << std::endl;
   caf.write();

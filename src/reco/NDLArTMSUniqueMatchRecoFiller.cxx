@@ -388,12 +388,14 @@ namespace cafmaker
     else {
       std::cout << "possibleSPINEMatches is empty. Did you expect that?\n";
     }
+    std::cout << "_FillRecoBranches completed\n";
   }
   // todo: this is a placeholder
-  //std::deque<Trigger> NDLArTMSUniqueMatchRecoFiller::GetTriggers(int triggerType, bool beamOnly) const
-  //{
-  //  return std::deque<Trigger>();
-  //}
-  // Commented out GetTriggers for validation
+  std::deque<Trigger> NDLArTMSUniqueMatchRecoFiller::GetTriggers(int triggerType, bool beamOnly) const
+  {
+    std::cout << "Attempting GetTriggers\n";
+    return std::deque<Trigger>();
+    std::cout << "Completed GetTriggers\n";
+  }
 
 }
