@@ -438,9 +438,9 @@ void loop(CAF &caf,
     // reset (the default constructor initializes its variables)
     caf.setToBS();
 
-
+    std::cout << groupedTriggers.size() << std::endl;
     // hand off to the correct reco filler(s).
-    std::cout << "groupedTriggers[0] size: " << groupedTriggers[ii].size()
+    std::cout << "groupedTriggers[ii] size: " << groupedTriggers[ii].size() << std:endl;
     for (const auto & fillerTrigPair : groupedTriggers[ii])
     {
       std::cout << "Event ID: " << fillerTrigPair.second.evtID << std::endl;

@@ -135,6 +135,7 @@ void CAF::setToBS()
   // use default constructors to reset
   sr = caf::StandardRecord();
   srglobal = caf::SRGlobal();
+  std::cout << "I've run setToBS\n";
 }
 
 int CAF::StoreGENIEEvent(const genie::NtpMCEventRecord *evtIn)
