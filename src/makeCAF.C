@@ -441,7 +441,7 @@ void loop(CAF &caf,
 
     std::cout << groupedTriggers.size() << std::endl;
     // hand off to the correct reco filler(s).
-    std::cout << "groupedTriggers[ii] size: " << groupedTriggers[ii].size() << std:endl;
+    std::cout << "groupedTriggers[ii] size: " << groupedTriggers[ii].size() << std::endl;
     for (const auto & fillerTrigPair : groupedTriggers[ii])
     {
       std::cout << "Event ID: " << fillerTrigPair.second.evtID << std::endl;
