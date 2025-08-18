@@ -390,9 +390,10 @@ namespace cafmaker
     }
   }
   // todo: this is a placeholder
-  std::deque<Trigger> NDLArTMSUniqueMatchRecoFiller::GetTriggers(int triggerType, bool beamOnly) const
-  {
-    return std::deque<Trigger>();
-  }
+  //std::deque<Trigger> NDLArTMSUniqueMatchRecoFiller::GetTriggers(int triggerType, bool beamOnly) const
+  //{
+  //  return std::deque<Trigger>();
+  //}
+  // Commented out GetTriggers for validation
 
 }
