@@ -168,10 +168,10 @@ namespace cafmaker
         caf::SRTrack tms_trk = tms_int.tracks[itms];
         //std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
         float tms_time = tms_trk.time;
-        std::cout << "TMS Time: " << tms_time << std::endl;
+        //std::cout << "TMS Time: " << tms_time << std::endl;
 
         if (!Consider_TMS_track(tms_trk,tms_z_cutoff)) {
-          std::cout << "Not considering this TMS track, skipping" << std::endl;
+          //std::cout << "Not considering this TMS track, skipping" << std::endl;
           continue; //skips the tms track if it isn't suitable according to the function
         }
 
@@ -187,7 +187,7 @@ namespace cafmaker
             
 
             if (!Consider_LAr_track(pan_trk,lar_z_cutoff)) {
-              std::cout << "Not considering this LAr track, skipping" << std::endl;
+              //std::cout << "Not considering this LAr track, skipping" << std::endl;
               continue; //skips the lar track if it isn't suitable according to the function
             }
             
@@ -248,7 +248,13 @@ namespace cafmaker
 
             std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
             std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << std::endl;
+            std::cout << "TMS start x: " << tms_trk.start.x << " Projected LAr start x: " << proj_vec[0] << " Delta x: " << delta_x << std::endl;
+            std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
+            std::cout << "TMS start y: " << tms_trk.start.y << " Projected LAr start y: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
+            std::cout << "Sigma y: " << sigma_y << " Y term: " << pow(delta_y/sigma_y,2) << std::endl;
+            std::cout << "Angle: " << angle << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angle/sigma_angle,2) << std::endl;
             std::cout << "Match score: " << potential_match.matchScore << std::endl;
+            std::cout << "==============================================================" < std::endl;
 
             possiblePandoraMatches.push_back(potential_match);
           }
@@ -293,6 +299,7 @@ namespace cafmaker
               float lar_time = sr.mc.Particle(partID)->time;
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
+
             }
             //std::cout << "Match score = " << fScore << std::endl;
             //std::cout << "fCut = " << f_cut << std::endl;
@@ -326,13 +333,13 @@ namespace cafmaker
         caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
         double score = track_match.matchScore;
         if (score > f_cut) {
-          std::cout << "Match score " << score << " > cut " << f_cut << " so no match" << std::endl;
+          //std::cout << "Match score " << score << " > cut " << f_cut << " so no match" << std::endl;
           break;}
         caf::SRNDLArID panid = track_match.larid;
         bool seen_lar = false;
         for (auto const seen_panid : matched_pan) {
           if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
-            std::cout << "This LAr track with ixn " << panid.ixn << " " << seen_panid.ixn << " and idx " << panid.idx << " " << seen_panid.idx << " has already been matched. Skipping." << std::endl;
+            //std::cout << "This LAr track with ixn " << panid.ixn << " " << seen_panid.ixn << " and idx " << panid.idx << " " << seen_panid.idx << " has already been matched. Skipping." << std::endl;
             seen_lar = true;
             break;
           }
@@ -344,13 +351,13 @@ namespace cafmaker
         bool seen_tms = false;
         for (auto const seen_tmsid : matched_tmspan) {
           if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
-            std::cout << "This TMS track with ixn " << tmsid.ixn << " " << seen_tmsid.ixn << " and idx " << tmsid.idx << " " << seen_tmsid.idx << " has already been matched. Skipping." << std::endl;
+            //std::cout << "This TMS track with ixn " << tmsid.ixn << " " << seen_tmsid.ixn << " and idx " << tmsid.idx << " " << seen_tmsid.idx << " has already been matched. Skipping." << std::endl;
             seen_tms = true;
             break;
           }
         }
         if (seen_tms) {
-          std::cout << "seen_tms = true" << std::endl;
+          //std::cout << "seen_tms = true" << std::endl;
           continue;}
         
         matched_tmspan.push_back(tmsid);

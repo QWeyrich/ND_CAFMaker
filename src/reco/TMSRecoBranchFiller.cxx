@@ -112,12 +112,12 @@ namespace cafmaker
     sr.nd.tms.nixn += 1; //Make sure to update nixn
 
     interaction.ntracks = 0;
-    std::cout << "About to enter while loop\n";
+    //std::cout << "About to enter while loop\n";
     while (_SpillNo == LastSpillNo && i < TMSRecoTree->GetEntries()) // while we're in the spill
     {
       TMSLCTree->GetEntry(i);
       TMSRecoTree->GetEntry(i++); // Load each subsequent entry in the spill, start from original i
-      std::cout << "1st TMS time " << _TMSStartTime << std::endl;
+      //std::cout << "1st TMS time " << _TMSStartTime << std::endl;
       if (_nTracks > 0)
       {
         interaction.tracks.resize(_nTracks + interaction.tracks.size());
@@ -128,7 +128,7 @@ namespace cafmaker
           interaction.tracks[j].dir     = caf::SRVector3D(_TrackStartDirection[j][0], _TrackStartDirection[j][1] , _TrackStartDirection[j][2]);
           interaction.tracks[j].enddir  = caf::SRVector3D(_TrackEndDirection[j][0], _TrackEndDirection[j][1] , _TrackEndDirection[j][2]);
           interaction.tracks[j].time    = _TMSStartTime; //Adds time of interaction
-          std::cout << "2nd TMS time " << interaction.tracks[j].time << std::endl;
+          //std::cout << "2nd TMS time " << interaction.tracks[j].time << std::endl;
 
           // Calculate length by summing up the distances from the kalman reco positions
 //          double tmpLength_cm = 0.0;
@@ -147,7 +147,7 @@ namespace cafmaker
       }
     }
 
-    std::cout << "Done filling TMS info for spill " << LastSpillNo << std::endl;
+    //std::cout << "Done filling TMS info for spill " << LastSpillNo << std::endl;
   }
 
 
