@@ -230,6 +230,7 @@ namespace cafmaker
               for ( auto const& neutrino : sr.mc.nu) {
                 for ( auto const& primary : neutrino.prim) {
                   std::cout << "Primary time " << primary.time << std::endl;
+                  std::cout << "Primary G4ID: " << primary.G4ID << std::endl;
                 }
                 for ( auto const& secondary : neutrino.sec) {
                   std::cout << "Secondary time " << secondary.time << std::endl;
