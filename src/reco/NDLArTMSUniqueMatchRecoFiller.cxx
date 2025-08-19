@@ -166,7 +166,7 @@ namespace cafmaker
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
         caf::SRTrack tms_trk = tms_int.tracks[itms];
-        std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
+        //std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
         float tms_time = tms_trk.time;
         std::cout << "TMS Time: " << tms_time << std::endl;
 
@@ -183,14 +183,14 @@ namespace cafmaker
           for (unsigned int ipan = 0; ipan < n_pan_tracks; ipan++)
           {
             caf::SRTrack pan_trk = pan_int.tracks[ipan];
-            std::cout << "Pandora Start X: " << pan_trk.start.x << " Pandora Start X Dir: " << pan_trk.dir.x<< std::endl;
+            //std::cout << "Pandora Start X: " << pan_trk.start.x << " Pandora Start X Dir: " << pan_trk.dir.x<< std::endl;
             
 
             if (!Consider_LAr_track(pan_trk,lar_z_cutoff)) {
               std::cout << "Not considering this LAr track, skipping" << std::endl;
               continue; //skips the lar track if it isn't suitable according to the function
             }
-
+            
             std::vector<double> proj_vec = Project_track(pan_trk,true);
 
             double delta_x = tms_trk.start.x - proj_vec[0];
@@ -229,8 +229,8 @@ namespace cafmaker
               fScore += pow((delta_t-mean_t)/sigma_t,2);
               std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
             }
-            std::cout << "Match score = " << fScore << std::endl;
-            std::cout << "fCut = " << f_cut << std::endl;
+            //std::cout << "Match score = " << fScore << std::endl;
+            //std::cout << "fCut = " << f_cut << std::endl;
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
             tmsid.idx = itms;
@@ -245,6 +245,10 @@ namespace cafmaker
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
             potential_match.angdispl = cos(TMath::Pi()/180.0 * *angles.end());
+
+            std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
+            std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << std::endl;
+            std::cout << "Match score: " << potential_match.matchScore << std::endl;
 
             possiblePandoraMatches.push_back(potential_match);
           }
@@ -290,8 +294,8 @@ namespace cafmaker
               float delta_t = lar_time - tms_time;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
             }
-            std::cout << "Match score = " << fScore << std::endl;
-            std::cout << "fCut = " << f_cut << std::endl;
+            //std::cout << "Match score = " << fScore << std::endl;
+            //std::cout << "fCut = " << f_cut << std::endl;
             caf::SRTMSID tmsid;
             tmsid.ixn = ixn_tms;
             tmsid.idx = itms;
@@ -346,7 +350,7 @@ namespace cafmaker
           }
         }
         if (seen_tms) {
-          std::cout << "seen_lar = true" << std::endl;
+          std::cout << "seen_tms = true" << std::endl;
           continue;}
         
         matched_tmspan.push_back(tmsid);
