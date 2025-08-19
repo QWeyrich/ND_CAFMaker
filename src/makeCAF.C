@@ -436,18 +436,18 @@ void loop(CAF &caf,
       cafmaker::LOG_S("loop()").INFO() << "Processing trigger: " << ii << "\n";
 
     // reset (the default constructor initializes its variables)
-    std::cout << "About to run setToBS\n";
+    //std::cout << "About to run setToBS\n";
     caf.setToBS();
 
-    std::cout << groupedTriggers.size() << std::endl;
+    //std::cout << groupedTriggers.size() << std::endl;
     // hand off to the correct reco filler(s).
-    std::cout << "groupedTriggers[ii] size: " << groupedTriggers[ii].size() << std::endl;
+    //std::cout << "groupedTriggers[ii] size: " << groupedTriggers[ii].size() << std::endl;
     for (const auto & fillerTrigPair : groupedTriggers[ii])
     {
-      std::cout << "Event ID: " << fillerTrigPair.second.evtID << std::endl;
-      std::cout << "Trigger Type: " << fillerTrigPair.second.triggerType << std::endl;
-      std::cout << "Time [s]: " << fillerTrigPair.second.triggerTime_s << std::endl;
-      std::cout << "Time [ns]: " << fillerTrigPair.second.triggerTime_ns << std::endl;
+      //std::cout << "Event ID: " << fillerTrigPair.second.evtID << std::endl;
+      //std::cout << "Trigger Type: " << fillerTrigPair.second.triggerType << std::endl;
+      //std::cout << "Time [s]: " << fillerTrigPair.second.triggerTime_s << std::endl;
+      //std::cout << "Time [ns]: " << fillerTrigPair.second.triggerTime_ns << std::endl;
       cafmaker::LOG_S("loop()").INFO() << "Global trigger idx : " << ii << ", reco filler: '" << fillerTrigPair.first->GetName() << "', reco trigger eventID: " << fillerTrigPair.second.evtID << "\n";
       fillerTrigPair.first->FillRecoBranches(fillerTrigPair.second, caf.sr, par, &truthMatcher);
     }
@@ -466,13 +466,13 @@ void loop(CAF &caf,
     if (useIFBeam)
     {
         pot = beamManager.getPOT(par, groupedTriggers[ii], ii);
-        std::cout << "Filled POT (useIFBeam true)\n";
+        //std::cout << "Filled POT (useIFBeam true)\n";
     }
     else
     {
 	pot = par().runInfo().POTPerSpill() * 1e13;
         caf.sr.beam.ismc = true;
-        std::cout << "Filled POT (useIFBeam false)\n";
+        //std::cout << "Filled POT (useIFBeam false)\n";
     }
     if (std::isnan(caf.pot))
       caf.pot = 0;

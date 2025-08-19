@@ -91,9 +91,12 @@ namespace cafmaker
         double yz_dot_prod = yz_dot_prod/(sqrt(pow(tms_dir_y,2)+pow(tms_dir_z,2))*sqrt(pow(lar_dir_y,2)+pow(lar_dir_z,2)));
       }
       double dot_prod = tms_dir_x*lar_dir_x + tms_dir_y*lar_dir_y + tms_dir_z*lar_dir_z;
+      std::cout << "Dot product: " << dot_prod << std::endl;
+      std::cout << "Arccos: " << acos(dot_prod) << std::endl;
       double angle_x = 180.0/TMath::Pi() * acos(xz_dot_prod);
       double angle_y = 180.0/TMath::Pi() * acos(yz_dot_prod);
       double angle_overall = 180.0/TMath::Pi() * acos(dot_prod);
+      std::cout << "Angle: " << angle_overall << std::endl;
       std::vector<double> angles = {angle_x,angle_y,angle_overall};
       return angles;
   }
@@ -202,6 +205,7 @@ namespace cafmaker
 
             if (single_angle) {
               double angle = *angles.end();
+              std::cout << "angle: " << angle << std::endl;
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
@@ -369,7 +373,7 @@ namespace cafmaker
       }
     }
     else {
-      std::cout << "possiblePandoraMatches is empty. Did you expect that?\n";
+      //std::cout << "possiblePandoraMatches is empty. Did you expect that?\n";
     }
 
     if (possibleSPINEMatches.size() > 0) {
@@ -408,7 +412,7 @@ namespace cafmaker
       }
     }
     else {
-      std::cout << "possibleSPINEMatches is empty. Did you expect that?\n";
+      //std::cout << "possibleSPINEMatches is empty. Did you expect that?\n";
     }
     std::cout << "_FillRecoBranches completed\n";
   }
