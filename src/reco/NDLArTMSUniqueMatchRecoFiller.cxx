@@ -227,8 +227,14 @@ namespace cafmaker
               std::cout << "Particle ixn: " << partID.ixn << std::endl;
               std::cout << "Particle idx: " << partID.part << std::endl;
               std::cout << "Found true particle ID" << std::endl;
-              float lar_time = sr.mc.Particle(partID)->time;
-              std::cout << "LAr time: " << lar_time << std::endl;
+              for ( auto const& neutrino : sr->mc.nu) {
+                for ( auto const& primary : neutrino.prim) {
+                  std::cout << "Primary time " << primary.time << std::endl;
+                }
+                for ( auto const& secondary : neutrino.sec) {
+                  std::cout << "Secondary time " << secondary.time << std::endl;
+                }
+              }
               float delta_t = lar_time - tms_time;
               std::cout << "Delta t: " << delta_t << std::endl;
               fScore += pow((delta_t-mean_t)/sigma_t,2);
