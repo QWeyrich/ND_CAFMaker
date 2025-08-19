@@ -165,7 +165,7 @@ namespace cafmaker
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];
       unsigned int n_tms_tracks = tms_int.ntracks;
-      std::cout << "Number of TMS tracks: " << n_tms_trks << std::endl;
+      std::cout << "Number of TMS tracks: " << n_tms_tracks << std::endl;
 
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
