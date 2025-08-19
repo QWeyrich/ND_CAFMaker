@@ -204,7 +204,7 @@ namespace cafmaker
             double fScore = std::numeric_limits<double>::max();
 
             if (single_angle) {
-              double angle = angles.end();
+              double angle = angles[2];
 
               std::cout << "angle: " << angle << std::endl;
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
@@ -249,7 +249,7 @@ namespace cafmaker
             potential_match.larid = panid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
-            potential_match.angdispl = cos(TMath::Pi()/180.0 * angles.end());
+            potential_match.angdispl = cos(TMath::Pi()/180.0 * angles[2]);
 
             std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
             std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << std::endl;
@@ -257,7 +257,7 @@ namespace cafmaker
             std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
             std::cout << "TMS start y: " << tms_trk.start.y << " Projected LAr start y: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
             std::cout << "Sigma y: " << sigma_y << " Y term: " << pow(delta_y/sigma_y,2) << std::endl;
-            std::cout << "Angle: " << angles.end() << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angles.end()/sigma_angle,2) << std::endl;
+            std::cout << "Angle: " << angles[2] << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angles[2]/sigma_angle,2) << std::endl;
             std::cout << "Match score: " << potential_match.matchScore << std::endl;
             std::cout << "----------------------------------------------------------------" << std::endl;
 
@@ -287,7 +287,7 @@ namespace cafmaker
             double fScore = std::numeric_limits<double>::max();
 
             if (single_angle) {
-              double angle = angles.end();
+              double angle = angles[2];
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
@@ -321,7 +321,7 @@ namespace cafmaker
             potential_match.larid = dlpid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
-            potential_match.angdispl = cos(TMath::Pi()/180.0 * angles.end());
+            potential_match.angdispl = cos(TMath::Pi()/180.0 * angles[2]);
 
             possibleSPINEMatches.push_back(potential_match);
           }
