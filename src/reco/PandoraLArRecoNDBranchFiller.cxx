@@ -67,6 +67,19 @@ namespace cafmaker
     }
   }
 
+  namespace
+    {
+      struct SRPartCmp
+      {
+        int trkid;
+        bool operator()(const caf::SRTrueParticle & part) const
+        {
+          LOG_S("SRPartCmp").VERBOSE() << "       SRPartCmp::operator()():  looking for trk ID = " << trkid << ", this particle trkID = " << part.G4ID << "\n";
+          return trkid == part.G4ID;
+        }
+      };
+    }
+
   // Copy all of the Pandora LArRecoND info to the PandoraLArRecoND branch of the StandardRecord object
   void PandoraLArRecoNDBranchFiller::_FillRecoBranches(const Trigger &trigger,
                                                        caf::StandardRecord &sr,
@@ -166,6 +179,8 @@ namespace cafmaker
     // Create tracks for each PFO (cluster) in the event
     LOG.VERBOSE() << " Pandora LArRecoND FillTracks using " << nClusters << " PFO clusters\n";
 
+    static SRPartCmp srPartCmp;
+
     const caf::TrueParticleID nullTrueID;
     // Direction of the longest track
     float maxTrackLength{0.0};
@@ -249,7 +264,6 @@ namespace cafmaker
       if (isPrimary == 1)
       {
         truePartID.type = caf::TrueParticleID::kPrimary;
-        truePartID.part = mcId;
       }
       else if (isPrimary == -1)
       {
@@ -270,14 +284,29 @@ namespace cafmaker
         const int srTrueIntIdx = std::distance(sr.mc.nu.begin(), std::find_if(sr.mc.nu.begin(), sr.mc.nu.end(), predicate));
         truePartID.ixn = srTrueIntIdx;
 
+        srPartCmp.trkid = mcId;
+
+        caf::SRTrueParticle &srTruePart = isPrimary ? truthMatch->GetTrueParticle(sr, srTrueInt, mcId, srPartCmp, true, true) 
+                                                    : truthMatch->GetTrueParticle(sr, srTrueInt, mcId, srPartCmp, false, true);
+
         // If the particle is not a primary, we might want to create a new particle if it wasn't created originally
-        if (isPrimary != 1)
-        {
-          const auto pred = [&mcId](const caf::SRTrueParticle &part)
-          { return part.G4ID == mcId; };
-          truePartID.part = std::distance(srTrueInt.sec.begin(),
-                                          std::find_if(srTrueInt.sec.begin(), srTrueInt.sec.end(), pred));
-        }
+        // if (isPrimary != 1)
+        // {  
+        //   const auto pred = [&mcId](const caf::SRTrueParticle &part)
+        //   { return part.G4ID == mcId; };
+        //   truePartID.part = std::distance(srTrueInt.sec.begin(),
+        //                                   std::find_if(srTrueInt.sec.begin(), srTrueInt.sec.end(), pred));
+        // }
+
+        std::vector<caf::SRTrueParticle> & collection = is_primary
+                                                          ? srTrueInt.prim
+                                                          : srTrueInt.sec;
+        std::size_t truthVecIdx = std::distance(collection.begin(),
+                                                  std::find_if(collection.begin(),
+                                                               collection.end(),
+                                                               srPartCmp));
+
+        truePartID.part = static_cast<int>(truthVecIdx);
       }
 
       // Just store the best MC match
