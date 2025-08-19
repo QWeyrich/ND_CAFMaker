@@ -158,13 +158,14 @@ namespace cafmaker
     std::vector<caf::SRNDTrackAssn> possiblePandoraMatches; // vector will store all possible matched tracks between Pandora and TMS
     std::vector<caf::SRNDTrackAssn> possibleSPINEMatches; // vector will store all possible matched tracks between SPINE and TMS
 
-    double tms_z_cutoff = 10;
-    double lar_z_cutoff = 10; // tracks must overlap last/first 10 cm of the detectors
-    //std::cout << "I'm running the matching code on " << sr.nd.tms.nixn << std::endl;
+    double tms_z_cutoff = 20;
+    double lar_z_cutoff = 20; // tracks must overlap last/first 10 cm of the detectors
+    std::cout << "I'm running the matching code on " << sr.nd.tms.nixn << std::endl;
     for (unsigned int ixn_tms = 0; ixn_tms < sr.nd.tms.nixn; ixn_tms++)
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];
       unsigned int n_tms_tracks = tms_int.ntracks;
+      std::cout << "Number of TMS tracks: " << n_tms_trks << std::endl;
 
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
