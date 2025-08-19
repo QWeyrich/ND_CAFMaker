@@ -322,7 +322,7 @@ namespace cafmaker
         caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
         double score = track_match.matchScore;
         if (score > f_cut) {
-          std::cout << "Match score " << score << " > cut " << f_cut << " so no match" << endl;
+          std::cout << "Match score " << score << " > cut " << f_cut << " so no match" << std::endl;
           break;}
         caf::SRNDLArID panid = track_match.larid;
         bool seen_lar = false;
