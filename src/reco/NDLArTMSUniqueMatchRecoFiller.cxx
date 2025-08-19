@@ -171,7 +171,7 @@ namespace cafmaker
         std::cout << "TMS Time: " << tms_time << std::endl;
 
         if (!Consider_TMS_track(tms_trk,tms_z_cutoff)) {
-          std::cout << "Not considering this track, skipping" << std::endl;
+          std::cout << "Not considering this TMS track, skipping" << std::endl;
           continue; //skips the tms track if it isn't suitable according to the function
         }
 
@@ -187,6 +187,7 @@ namespace cafmaker
             
 
             if (!Consider_LAr_track(pan_trk,lar_z_cutoff)) {
+              std::cout << "Not considering this LAr track, skipping" << std::endl;
               continue; //skips the lar track if it isn't suitable according to the function
             }
 
@@ -320,30 +321,40 @@ namespace cafmaker
       for (unsigned int match_idx = 0; match_idx < possiblePandoraMatches.size(); match_idx++) {
         caf::SRNDTrackAssn track_match = possiblePandoraMatches[match_idx];
         double score = track_match.matchScore;
-        if (score > f_cut) {break;}
+        if (score > f_cut) {
+          std::cout << "Match score " << score << " > cut " << f_cut << " so no match" << endl;
+          break;}
         caf::SRNDLArID panid = track_match.larid;
         bool seen_lar = false;
         for (auto const seen_panid : matched_pan) {
           if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
+            std::cout << "This LAr track with ixn " << panid.ixn << " " << seen_panid.ixn << " and idx " << << panid.idx << " " << seen_panid.idx << " has already been matched. Skipping." << std::endl;
             seen_lar = true;
             break;
           }
         }
-        if (seen_lar) {continue;}
+        if (seen_lar) {
+          std::cout << "seen_lar = true" << std::endl;
+          continue;}
         caf::SRTMSID tmsid = track_match.tmsid;
         bool seen_tms = false;
         for (auto const seen_tmsid : matched_tmspan) {
           if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
+            std::cout << "This TMS track with ixn " << tmsid.ixn << " " << seen_tmsid.ixn << " and idx " << << tmsid.idx << " " << seen_tmsid.idx << " has already been matched. Skipping." << std::endl;
             seen_tms = true;
             break;
           }
         }
-        if (seen_tms) {continue;}
+        if (seen_tms) {
+          std::cout << "seen_lar = true" << std::endl;
+          continue;}
         
         matched_tmspan.push_back(tmsid);
         matched_pan.push_back(panid);
         sr.nd.trkmatch.extrap.push_back(track_match);
+        std::cout << "nextrap before " << sr.nd.trkmatch.nextrap << std::endl;
         sr.nd.trkmatch.nextrap += 1;
+        std::cout << "nextrap after " << sr.nd.trkmatch.nextrap << std::endl;
       }
     }
     else {
