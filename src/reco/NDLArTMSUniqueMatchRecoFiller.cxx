@@ -328,7 +328,7 @@ namespace cafmaker
         bool seen_lar = false;
         for (auto const seen_panid : matched_pan) {
           if (seen_panid.ixn == panid.ixn && seen_panid.idx == panid.idx) {
-            std::cout << "This LAr track with ixn " << panid.ixn << " " << seen_panid.ixn << " and idx " << << panid.idx << " " << seen_panid.idx << " has already been matched. Skipping." << std::endl;
+            std::cout << "This LAr track with ixn " << panid.ixn << " " << seen_panid.ixn << " and idx " << panid.idx << " " << seen_panid.idx << " has already been matched. Skipping." << std::endl;
             seen_lar = true;
             break;
           }
@@ -340,7 +340,7 @@ namespace cafmaker
         bool seen_tms = false;
         for (auto const seen_tmsid : matched_tmspan) {
           if (seen_tmsid.ixn == tmsid.ixn && seen_tmsid.idx == tmsid.idx) {
-            std::cout << "This TMS track with ixn " << tmsid.ixn << " " << seen_tmsid.ixn << " and idx " << << tmsid.idx << " " << seen_tmsid.idx << " has already been matched. Skipping." << std::endl;
+            std::cout << "This TMS track with ixn " << tmsid.ixn << " " << seen_tmsid.ixn << " and idx " << tmsid.idx << " " << seen_tmsid.idx << " has already been matched. Skipping." << std::endl;
             seen_tms = true;
             break;
           }
