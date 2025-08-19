@@ -235,10 +235,10 @@ namespace cafmaker
                   std::cout << "Secondary time " << secondary.time << std::endl;
                 }
               }
-              float delta_t = lar_time - tms_time;
-              std::cout << "Delta t: " << delta_t << std::endl;
-              fScore += pow((delta_t-mean_t)/sigma_t,2);
-              std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
+              //float delta_t = lar_time - tms_time;
+              //std::cout << "Delta t: " << delta_t << std::endl;
+              //fScore += pow((delta_t-mean_t)/sigma_t,2);
+              //std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
             }
             //std::cout << "Match score = " << fScore << std::endl;
             //std::cout << "fCut = " << f_cut << std::endl;
