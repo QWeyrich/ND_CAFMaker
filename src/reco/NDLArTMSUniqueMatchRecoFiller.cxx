@@ -227,7 +227,7 @@ namespace cafmaker
               std::cout << "Particle ixn: " << partID.ixn << std::endl;
               std::cout << "Particle idx: " << partID.part << std::endl;
               std::cout << "Found true particle ID" << std::endl;
-              for ( auto const& neutrino : sr->mc.nu) {
+              for ( auto const& neutrino : sr.mc.nu) {
                 for ( auto const& primary : neutrino.prim) {
                   std::cout << "Primary time " << primary.time << std::endl;
                 }
