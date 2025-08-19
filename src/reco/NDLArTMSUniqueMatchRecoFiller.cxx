@@ -254,7 +254,7 @@ namespace cafmaker
             std::cout << "Sigma y: " << sigma_y << " Y term: " << pow(delta_y/sigma_y,2) << std::endl;
             std::cout << "Angle: " << *angles.end << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angle/sigma_angle,2) << std::endl;
             std::cout << "Match score: " << potential_match.matchScore << std::endl;
-            std::cout << "----------------------------------------------------------------" < std::endl;
+            std::cout << "----------------------------------------------------------------" << std::endl;
 
             possiblePandoraMatches.push_back(potential_match);
           }
