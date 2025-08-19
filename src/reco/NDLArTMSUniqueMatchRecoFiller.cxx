@@ -223,23 +223,20 @@ namespace cafmaker
               std::cout << "idx_max " << idx_max <<std::endl;
               std::cout << "Size of truIDs " << truIDs.size() << std::endl;
               caf::TrueParticleID partID = truIDs[idx_max];
-              std::cout << "Particle type: " << partID.type << std::endl;
-              std::cout << "Particle ixn: " << partID.ixn << std::endl;
-              std::cout << "Particle idx: " << partID.part << std::endl;
-              std::cout << "Found true particle ID" << std::endl;
-              for ( auto const& neutrino : sr.mc.nu) {
-                for ( auto const& primary : neutrino.prim) {
-                  std::cout << "Primary time " << primary.time << std::endl;
-                  std::cout << "Primary G4ID: " << primary.G4ID << std::endl;
-                }
-                for ( auto const& secondary : neutrino.sec) {
-                  std::cout << "Secondary time " << secondary.time << std::endl;
-                }
+              const auto& matchedPart = sr.mc.Particle(partID);
+              if (matchedPart != nullptr) {
+                std::cout << "Particle type: " << partID.type << std::endl;
+                std::cout << "Particle ixn: " << partID.ixn << std::endl;
+                std::cout << "Particle idx: " << partID.part << std::endl;
+                std::cout << "Found true particle ID" << std::endl;
+                float lar_time = matchedPart->time;
+                std::cout << "LAr time: " << lar_time << std::endl;
+                float delta_t = lar_time - tms_time;
+                std::cout << "Delta t: " << delta_t << std::endl;
+                fScore += pow((delta_t-mean_t)/sigma_t,2);
+                std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
               }
-              //float delta_t = lar_time - tms_time;
-              //std::cout << "Delta t: " << delta_t << std::endl;
-              //fScore += pow((delta_t-mean_t)/sigma_t,2);
-              //std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
+              else {std::cout << "Invalid particle ID, not using time in match score" << std::endl;}
             }
             //std::cout << "Match score = " << fScore << std::endl;
             //std::cout << "fCut = " << f_cut << std::endl;
