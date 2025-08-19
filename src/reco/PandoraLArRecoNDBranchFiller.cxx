@@ -286,7 +286,7 @@ namespace cafmaker
 
         srPartCmp.trkid = mcId;
 
-        caf::SRTrueParticle &srTruePart = isPrimary ? truthMatch->GetTrueParticle(sr, srTrueInt, mcId, srPartCmp, true, true) 
+        isPrimary ? truthMatch->GetTrueParticle(sr, srTrueInt, mcId, srPartCmp, true, true) 
                                                     : truthMatch->GetTrueParticle(sr, srTrueInt, mcId, srPartCmp, false, true);
 
         // If the particle is not a primary, we might want to create a new particle if it wasn't created originally
@@ -298,7 +298,7 @@ namespace cafmaker
         //                                   std::find_if(srTrueInt.sec.begin(), srTrueInt.sec.end(), pred));
         // }
 
-        std::vector<caf::SRTrueParticle> & collection = is_primary
+        std::vector<caf::SRTrueParticle> & collection = isPrimary
                                                           ? srTrueInt.prim
                                                           : srTrueInt.sec;
         std::size_t truthVecIdx = std::distance(collection.begin(),
