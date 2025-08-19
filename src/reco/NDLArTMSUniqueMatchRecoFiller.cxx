@@ -165,12 +165,12 @@ namespace cafmaker
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];
       unsigned int n_tms_tracks = tms_int.ntracks;
-      std::cout << "Number of TMS tracks: " << n_tms_tracks << std::endl;
+      
 
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
         caf::SRTrack tms_trk = tms_int.tracks[itms];
-        //std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start X Dir: " << tms_trk.dir.x<< std::endl;
+        std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start Y: " << tms_trk.start.y << " TMS Start Z: " << tms_trk.start.z << std::endl;
         float tms_time = tms_trk.time;
         //std::cout << "TMS Time: " << tms_time << std::endl;
 
