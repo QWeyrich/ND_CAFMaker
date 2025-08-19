@@ -160,7 +160,7 @@ namespace cafmaker
 
     double tms_z_cutoff = 10;
     double lar_z_cutoff = 10; // tracks must overlap last/first 10 cm of the detectors
-    std::cout << "I'm running the matching code on " << sr.nd.tms.nixn << std::endl;
+    //std::cout << "I'm running the matching code on " << sr.nd.tms.nixn << std::endl;
     for (unsigned int ixn_tms = 0; ixn_tms < sr.nd.tms.nixn; ixn_tms++)
     {
       caf::SRTMSInt tms_int = sr.nd.tms.ixn[ixn_tms];
@@ -368,9 +368,9 @@ namespace cafmaker
         matched_tmspan.push_back(tmsid);
         matched_pan.push_back(panid);
         sr.nd.trkmatch.extrap.push_back(track_match);
-        std::cout << "nextrap before " << sr.nd.trkmatch.nextrap << std::endl;
+        //std::cout << "nextrap before " << sr.nd.trkmatch.nextrap << std::endl;
         sr.nd.trkmatch.nextrap += 1;
-        std::cout << "nextrap after " << sr.nd.trkmatch.nextrap << std::endl;
+        //std::cout << "nextrap after " << sr.nd.trkmatch.nextrap << std::endl;
       }
     }
     else {
@@ -415,7 +415,7 @@ namespace cafmaker
     else {
       //std::cout << "possibleSPINEMatches is empty. Did you expect that?\n";
     }
-    std::cout << "_FillRecoBranches completed\n";
+    //std::cout << "_FillRecoBranches completed\n";
   }
   // todo: this is a placeholder
   std::deque<Trigger> NDLArTMSUniqueMatchRecoFiller::GetTriggers(int triggerType, bool beamOnly) const
