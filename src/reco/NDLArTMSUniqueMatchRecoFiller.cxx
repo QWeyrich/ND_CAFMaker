@@ -230,9 +230,9 @@ namespace cafmaker
                 std::cout << "Particle ixn: " << partID.ixn << std::endl;
                 std::cout << "Particle idx: " << partID.part << std::endl;
                 std::cout << "Found true particle ID" << std::endl;
-                float lar_time = matchedPart->time;
+                double lar_time = matchedPart->time;
                 std::cout << "LAr time: " << lar_time << std::endl;
-                float delta_t = lar_time - tms_time;
+                double delta_t = lar_time - tms_time;
                 std::cout << "Delta t: " << delta_t << std::endl;
                 fScore += pow((delta_t-mean_t)/sigma_t,2);
                 std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
