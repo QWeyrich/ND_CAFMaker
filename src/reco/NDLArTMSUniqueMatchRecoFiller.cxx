@@ -204,8 +204,8 @@ namespace cafmaker
 
             double fScore = std::numeric_limits<double>::max();
 
-            double lar_time = nan;
-            double delta_t = nan;
+            double lar_time = 0;
+            double delta_t = 0;
 
             if (single_angle) {
               double angle = angles[2];
