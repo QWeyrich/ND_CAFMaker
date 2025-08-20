@@ -485,7 +485,7 @@ void loop(CAF &caf,
   // set other metadata
   caf.meta_run = par().runInfo().run();
   caf.meta_subrun = par().runInfo().subrun();
-  std::cout << "Finished loop\n";
+  //std::cout << "Finished loop\n";
 }
 
 // -------------------------------------------------

@@ -486,7 +486,7 @@ namespace cafmaker
 
   int TruthMatcher::FillParticle(caf::SRTrueInteraction &ixn, std::size_t nixn, int G4ID, std::vector<caf::SRTrueParticle> & collection, int & counter, const TG4Event * g4event)
   {
-    std::cout << "Trying to run FillParticle\n";
+    //std::cout << "Trying to run FillParticle\n";
     collection.emplace_back();
     int part_index = counter;
     counter++;
@@ -529,9 +529,9 @@ namespace cafmaker
     auto p0 = traj.Points[0];
     part.start_pos = (p0.Position * .1).Vect();
     part.time = p0.Position.T();
-    std::cout << "Particle time: " << part.time << std::endl;
-    std::cout << "Particle position: " << part.start_pos.X() << ", " << part.start_pos.Y() << ", " << part.start_pos.Z() << std::endl;
-    std::cout << "Particle PDG: " << part.pdg << std::endl;
+    //std::cout << "Particle time: " << part.time << std::endl;
+    //std::cout << "Particle position: " << part.start_pos.X() << ", " << part.start_pos.Y() << ", " << part.start_pos.Z() << std::endl;
+    //std::cout << "Particle PDG: " << part.pdg << std::endl;
     auto pf = traj.Points[traj.Points.size()-1];
     part.end_pos = (pf.Position * .1).Vect();
     return ancestor_id;

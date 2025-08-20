@@ -91,12 +91,12 @@ namespace cafmaker
         double yz_dot_prod = yz_dot_prod/(sqrt(pow(tms_dir_y,2)+pow(tms_dir_z,2))*sqrt(pow(lar_dir_y,2)+pow(lar_dir_z,2)));
       }
       double dot_prod = tms_dir_x*lar_dir_x + tms_dir_y*lar_dir_y + tms_dir_z*lar_dir_z;
-      std::cout << "Dot product: " << dot_prod << std::endl;
-      std::cout << "Arccos: " << acos(dot_prod) << std::endl;
+      //std::cout << "Dot product: " << dot_prod << std::endl;
+      //std::cout << "Arccos: " << acos(dot_prod) << std::endl;
       double angle_x = 180.0/TMath::Pi() * acos(xz_dot_prod);
       double angle_y = 180.0/TMath::Pi() * acos(yz_dot_prod);
       double angle_overall = 180.0/TMath::Pi() * acos(dot_prod);
-      std::cout << "Angle: " << angle_overall << std::endl;
+      //std::cout << "Angle: " << angle_overall << std::endl;
       std::vector<double> angles = {angle_x,angle_y,angle_overall};
       return angles;
   }
@@ -170,7 +170,7 @@ namespace cafmaker
       for (unsigned int itms = 0; itms < n_tms_tracks; itms++)
       {
         caf::SRTrack tms_trk = tms_int.tracks[itms];
-        std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start Y: " << tms_trk.start.y << " TMS Start Z: " << tms_trk.start.z << std::endl;
+        //std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start Y: " << tms_trk.start.y << " TMS Start Z: " << tms_trk.start.z << std::endl;
         float tms_time = tms_trk.time;
         //std::cout << "TMS Time: " << tms_time << std::endl;
 
@@ -207,7 +207,7 @@ namespace cafmaker
             if (single_angle) {
               double angle = angles[2];
 
-              std::cout << "angle: " << angle << std::endl;
+              //std::cout << "angle: " << angle << std::endl;
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
             }
             else {
@@ -216,28 +216,28 @@ namespace cafmaker
               fScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
             }
             if (use_time) {
-              std::cout << "Using time" << std::endl;
+              //std::cout << "Using time" << std::endl;
               std::vector<float> tO = pan_trk.truthOverlap;
               std::vector<caf::TrueParticleID> truIDs = pan_trk.truth;
               int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
-              std::cout << "idx_max " << idx_max <<std::endl;
-              std::cout << "Size of truIDs " << truIDs.size() << std::endl;
+              //std::cout << "idx_max " << idx_max <<std::endl;
+              //std::cout << "Size of truIDs " << truIDs.size() << std::endl;
               caf::TrueParticleID partID = truIDs[idx_max];
               const auto& matchedPart = sr.mc.Particle(partID);
               if (matchedPart != nullptr) {
-                std::cout << "Particle type: " << partID.type << std::endl;
-                std::cout << "Particle ixn: " << partID.ixn << std::endl;
-                std::cout << "Particle idx: " << partID.part << std::endl;
-                std::cout << "Found true particle ID" << std::endl;
+                //std::cout << "Particle type: " << partID.type << std::endl;
+                //std::cout << "Particle ixn: " << partID.ixn << std::endl;
+                //std::cout << "Particle idx: " << partID.part << std::endl;
+                //std::cout << "Found true particle ID" << std::endl;
                 double lar_time = matchedPart->time;
-                std::cout << "LAr time: " << lar_time << std::endl;
+                //std::cout << "LAr time: " << lar_time << std::endl;
                 double delta_t = lar_time - tms_time;
-                std::cout << "Delta t: " << delta_t << std::endl;
+                //std::cout << "Delta t: " << delta_t << std::endl;
                 fScore += pow((delta_t-mean_t)/sigma_t,2);
-                std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
+                //std::cout << "Addition to match score: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
               }
-              else {std::cout << "Invalid particle ID, not using time in match score" << std::endl;}
+              //else {std::cout << "Invalid particle ID, not using time in match score" << std::endl;}
             }
             //std::cout << "Match score = " << fScore << std::endl;
             //std::cout << "fCut = " << f_cut << std::endl;
