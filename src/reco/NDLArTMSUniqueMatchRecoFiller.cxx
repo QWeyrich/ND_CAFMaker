@@ -343,7 +343,6 @@ namespace cafmaker
               double lar_time = 0;
               if (matchedPart != nullptr) {
                 lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns;
-                start_pos = matchedPart->start_pos;
                 double delta_t = lar_time - tms_time;
                 fScore += pow((delta_t-mean_t)/sigma_t,2);
               }
