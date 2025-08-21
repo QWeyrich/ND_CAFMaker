@@ -78,9 +78,9 @@ namespace cafmaker
       double tms_dir_y = tms_track.dir.y;
       double tms_dir_z = tms_track.dir.z;
 
-      double lar_dir_x = lar_track.dir.x;
-      double lar_dir_y = lar_track.dir.y;
-      double lar_dir_z = lar_track.dir.z;
+      double lar_dir_x = lar_track.enddir.x;
+      double lar_dir_y = lar_track.enddir.y;
+      double lar_dir_z = lar_track.enddir.z;
 
       double xz_dot_prod = tms_dir_x*lar_dir_x + tms_dir_z*lar_dir_z;
       if (xz_dot_prod != 0) {
@@ -262,11 +262,11 @@ namespace cafmaker
             std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
             std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << std::endl;
             std::cout << "TMS start x: " << tms_trk.start.x << " TMS start y: " << tms_trk.start.y << " TMS start z: " << tms_trk.start.z << std::endl;
-            std::cout << "LAr start x: " << pan_trk.end.x << " LAr start y: " << pan_trk.end.y << " LAr start z: " << pan_trk.end.z << std::endl;
-            std::cout << "LAr x projection: " << proj_vec[0] << " Delta x: " << delta_x << std::endl;
-            std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
-            std::cout << "LAr y projection: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
-            std::cout << "Sigma y: " << sigma_y << " Y term: " << pow(delta_y/sigma_y,2) << std::endl;
+            std::cout << "LAr end x: " << pan_trk.end.x << " LAr end y: " << pan_trk.end.y << " LAr end z: " << pan_trk.end.z << std::endl;
+            //std::cout << "LAr x projection: " << proj_vec[0] << " Delta x: " << delta_x << std::endl;
+            //std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
+            //std::cout << "LAr y projection: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
+            //std::cout << "Sigma y: " << sigma_y << " Y term: " << pow(delta_y/sigma_y,2) << std::endl;
             std::cout << "Angle: " << angles[2] << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angles[2]/sigma_angle,2) << std::endl;
             if (use_time) {
               std::cout << "TMS time: " << tms_time << " LAr time: " << lar_time << " Delta t: " << delta_t << std::endl;
