@@ -255,11 +255,28 @@ namespace cafmaker
             panid.idx = ipan;
 
             caf::SRNDTrackAssn potential_match;
+            if (use_time) {
+              potential_match.matchType = caf::MatchType::kUniqueWithTime;
+            }
+            else {
+              potential_match.matchType = caf::MatchType::kUniqueNoTime;
+            }
             potential_match.tmsid = tmsid;
             potential_match.larid = panid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
             potential_match.angdispl = cos(TMath::Pi()/180.0 * angles[2]);
+
+            caf::SRTrack joint_track = potential_match.trk;
+            joint_track.start = pan_trk.start;
+            joint_track.end = tms_trk.end;
+            joint_track.dir = pan_trk.dir;
+            joint_track.enddir = tms_trk.enddir;
+
+            joint_track.time = tms_trk.time; // TODO: once we have LAr time working properly this should be switched to pan_trk.time
+
+            joint_track.Evis = pan_trk.Evis + tms_trk.Evis;
+            // TODO: add the rest of the joint_track attributes
 
             //std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
             std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << " LAr time: " << lar_time << std::endl;
@@ -338,11 +355,28 @@ namespace cafmaker
             dlpid.idx = idlp;
 
             caf::SRNDTrackAssn potential_match;
+            if (use_time) {
+              potential_match.matchType = caf::MatchType::kUniqueWithTime;
+            }
+            else {
+              potential_match.matchType = caf::MatchType::kUniqueNoTime;
+            }
             potential_match.tmsid = tmsid;
             potential_match.larid = dlpid;
             potential_match.matchScore = fScore;
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
             potential_match.angdispl = cos(TMath::Pi()/180.0 * angles[2]);
+
+            caf::SRTrack joint_track = potential_match.trk;
+            joint_track.start = dlp_trk.start;
+            joint_track.end = tms_trk.end;
+            joint_track.dir = dlp_trk.dir;
+            joint_track.enddir = tms_trk.enddir;
+
+            joint_track.time = tms_trk.time; // TODO: once we have LAr time working properly this should be switched to dlp_trk.time
+
+            joint_track.Evis = dlp_trk.Evis + tms_trk.Evis;
+            // TODO: add the rest of the joint_track attributes
 
             possibleSPINEMatches.push_back(potential_match);
           }
