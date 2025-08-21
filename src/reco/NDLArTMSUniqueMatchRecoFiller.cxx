@@ -205,6 +205,7 @@ namespace cafmaker
             double fScore = std::numeric_limits<double>::max();
 
             double lar_time = 0;
+            caf::SRVector3D start_pos;
             double delta_t = 0;
 
             if (single_angle) {
@@ -234,6 +235,7 @@ namespace cafmaker
                 //std::cout << "Particle idx: " << partID.part << std::endl;
                 //std::cout << "Found true particle ID" << std::endl;
                 lar_time = matchedPart->time;
+                start_pos = matchedPart->start_pos;
                 //std::cout << "LAr time: " << lar_time << std::endl;
                 delta_t = lar_time - tms_time;
                 //std::cout << "Delta t: " << delta_t << std::endl;
@@ -262,7 +264,7 @@ namespace cafmaker
             //std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
             std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << " LAr time: " << lar_time << std::endl;
             //std::cout << "TMS start x: " << tms_trk.start.x << " TMS start y: " << tms_trk.start.y << " TMS start z: " << tms_trk.start.z << std::endl;
-            std::cout << "LAr start x: " << pan_trk.start.x << " LAr start y: " << pan_trk.start.y << " LAr start z: " << pan_trk.start.z << std::endl;
+            std::cout << "LAr start x: " << start_pos.x << " LAr start y: " << start_pos.y << " LAr start z: " << start_pos.z << std::endl;
             //std::cout << "LAr x projection: " << proj_vec[0] << " Delta x: " << delta_x << std::endl;
             //std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
             //std::cout << "LAr y projection: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
