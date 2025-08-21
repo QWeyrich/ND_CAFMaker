@@ -171,7 +171,7 @@ namespace cafmaker
       {
         caf::SRTrack tms_trk = tms_int.tracks[itms];
         //std::cout << "TMS Start X: " << tms_trk.start.x << " TMS Start Y: " << tms_trk.start.y << " TMS Start Z: " << tms_trk.start.z << std::endl;
-        float tms_time = tms_trk.time;
+        double tms_time = tms_trk.time;
         //std::cout << "TMS Time: " << tms_time << std::endl;
 
         if (!Consider_TMS_track(tms_trk,tms_z_cutoff)) {
@@ -234,7 +234,7 @@ namespace cafmaker
                 //std::cout << "Particle ixn: " << partID.ixn << std::endl;
                 //std::cout << "Particle idx: " << partID.part << std::endl;
                 //std::cout << "Found true particle ID" << std::endl;
-                lar_time = matchedPart->time;
+                lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns;
                 start_pos = matchedPart->start_pos;
                 //std::cout << "LAr time: " << lar_time << std::endl;
                 delta_t = lar_time - tms_time;
@@ -339,10 +339,14 @@ namespace cafmaker
               int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               // Finds the index of the TrueParticleID that was responsible for the largest portion of the track
               caf::TrueParticleID partID = truIDs[idx_max];
-              float lar_time = sr.mc.Particle(partID)->time;
-              float delta_t = lar_time - tms_time;
-              fScore += pow((delta_t-mean_t)/sigma_t,2);
-
+              const auto& matchedPart = sr.mc.Particle(partID);
+              double lar_time = 0;
+              if (matchedPart != nullptr) {
+                lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns;
+                start_pos = matchedPart->start_pos;
+                double delta_t = lar_time - tms_time;
+                fScore += pow((delta_t-mean_t)/sigma_t,2);
+              }
             }
             //std::cout << "Match score = " << fScore << std::endl;
             //std::cout << "fCut = " << f_cut << std::endl;
