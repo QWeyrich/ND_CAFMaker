@@ -259,25 +259,25 @@ namespace cafmaker
             potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
             potential_match.angdispl = cos(TMath::Pi()/180.0 * angles[2]);
 
-            std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
-            std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << std::endl;
-            std::cout << "TMS start x: " << tms_trk.start.x << " TMS start y: " << tms_trk.start.y << " TMS start z: " << tms_trk.start.z << std::endl;
+            //std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
+            std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << " LAr time: " << lar_time << std::endl;
+            //std::cout << "TMS start x: " << tms_trk.start.x << " TMS start y: " << tms_trk.start.y << " TMS start z: " << tms_trk.start.z << std::endl;
             std::cout << "LAr end x: " << pan_trk.end.x << " LAr end y: " << pan_trk.end.y << " LAr end z: " << pan_trk.end.z << std::endl;
             //std::cout << "LAr x projection: " << proj_vec[0] << " Delta x: " << delta_x << std::endl;
             //std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
             //std::cout << "LAr y projection: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
             //std::cout << "Sigma y: " << sigma_y << " Y term: " << pow(delta_y/sigma_y,2) << std::endl;
-            std::cout << "Angle: " << angles[2] << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angles[2]/sigma_angle,2) << std::endl;
+            //std::cout << "Angle: " << angles[2] << " Sigma angle: " << sigma_angle << " Angle term: " << pow(angles[2]/sigma_angle,2) << std::endl;
             if (use_time) {
-              std::cout << "TMS time: " << tms_time << " LAr time: " << lar_time << " Delta t: " << delta_t << std::endl;
-              std::cout << "Mean time: " << mean_t << "Sigma t: " << sigma_t << " T term: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
-              std::cout << "Sum: " << pow(delta_x/sigma_x,2)+pow(delta_y/sigma_y,2)+pow(angles[2]/sigma_angle,2)+pow((delta_t-mean_t)/sigma_t,2) << std::endl;
+              //std::cout << "TMS time: " << tms_time << " LAr time: " << lar_time << " Delta t: " << delta_t << std::endl;
+              //std::cout << "Mean time: " << mean_t << "Sigma t: " << sigma_t << " T term: " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
+              //std::cout << "Sum: " << pow(delta_x/sigma_x,2)+pow(delta_y/sigma_y,2)+pow(angles[2]/sigma_angle,2)+pow((delta_t-mean_t)/sigma_t,2) << std::endl;
             }
             else {
-              std::cout << "No time" << std::endl;
-              std::cout << "Sum: " << pow(delta_x/sigma_x,2)+pow(delta_y/sigma_y,2)+pow(angles[2]/sigma_angle,2) << std::endl;
+              //std::cout << "No time" << std::endl;
+              //std::cout << "Sum: " << pow(delta_x/sigma_x,2)+pow(delta_y/sigma_y,2)+pow(angles[2]/sigma_angle,2) << std::endl;
             }
-            std::cout << "Match score: " << potential_match.matchScore << std::endl;
+            //std::cout << "Match score: " << potential_match.matchScore << std::endl;
             std::cout << "----------------------------------------------------------------" << std::endl;
 
             possiblePandoraMatches.push_back(potential_match);
