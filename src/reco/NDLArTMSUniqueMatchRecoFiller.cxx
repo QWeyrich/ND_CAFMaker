@@ -262,7 +262,7 @@ namespace cafmaker
             std::cout << "TMS ixn: " << potential_match.tmsid.ixn << " TMS trk: " << potential_match.tmsid.idx << std::endl;
             std::cout << "LAr ixn: " << potential_match.larid.ixn << " LAr trk: " << potential_match.larid.idx << std::endl;
             std::cout << "TMS start x: " << tms_trk.start.x << " TMS start y: " << tms_trk.start.y << " TMS start z: " << tms_trk.start.z << std::endl;
-            std::cout << "LAr start x: " << pan_trk.start.x << " LAr start y: " << pan_trk.start.y << " LAr start z: " << pan_trk.start.z << std::endl;
+            std::cout << "LAr start x: " << pan_trk.end.x << " LAr start y: " << pan_trk.end.y << " LAr start z: " << pan_trk.end.z << std::endl;
             std::cout << "LAr x projection: " << proj_vec[0] << " Delta x: " << delta_x << std::endl;
             std::cout << "Sigma x: " << sigma_x << " X term: " << pow(delta_x/sigma_x,2) << std::endl;
             std::cout << "LAr y projection: " << proj_vec[1] << " Delta y: " << delta_y << std::endl;
