@@ -222,6 +222,7 @@ namespace cafmaker
             if (use_time) {
               std::vector<float> tO = pan_trk.truthOverlap;
               std::vector<caf::TrueParticleID> truIDs = pan_trk.truth;
+              std::cout << "Length of truIDs: " << truIDs.size << std::endl;
               int idx_max = std::distance(tO.begin(),std::max_element(tO.begin(),tO.end()));
               caf::TrueParticleID partID = truIDs[idx_max];
               const auto& matchedPart = sr.mc.Particle(partID);
