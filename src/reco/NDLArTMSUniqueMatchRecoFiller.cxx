@@ -215,8 +215,11 @@ namespace cafmaker
               caf::TrueParticleID partID = truIDs[idx_max];
               const auto& matchedPart = sr.mc.Particle(partID);
               if (matchedPart != nullptr) {
+                std::cout matchedPart->time std::endl;
                 lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns;
+                std::cout lar_time std::endl;
                 start_pos = matchedPart->start_pos;
+                std::cout start_pos std::endl;
                 delta_t = lar_time - tms_time;
                 fScore += pow((delta_t-mean_t)/sigma_t,2);
               }
