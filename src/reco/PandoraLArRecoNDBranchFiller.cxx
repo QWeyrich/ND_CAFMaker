@@ -234,20 +234,24 @@ namespace cafmaker
 
       if (isPrimary == 1)
       {
+        std::cout << "isPrimary = 1" << std::endl;
         truePartID.type = caf::TrueParticleID::kPrimary;
         truePartID.part = mcId;
       }
       else if (isPrimary == -1)
       {
+        std::cout << "isPrimary = -1" << std::endl;
         truePartID.type = caf::TrueParticleID::kUnknown;
       }
       else
       {
+        std::cout << "|isPrimary| =/= 1" << std::endl;
         truePartID.type = caf::TrueParticleID::kSecondary;
       }
 
       if (mcNuId != 0)
       {
+        std::cout << "mcNuId =/= 0" << std::endl;
         // Get the true interaction in the stack
         caf::SRTrueInteraction &srTrueInt = truthMatch->GetTrueInteraction(sr, mcNuId);
         const auto predicate = [&srTrueInt](const caf::SRTrueInteraction &ixn)
@@ -265,6 +269,9 @@ namespace cafmaker
                                           std::find_if(srTrueInt.sec.begin(), srTrueInt.sec.end(), pred));
         }
       }
+      std::cout << "truePartID type: " << truePartID.type << std::endl;
+      std::cout << "truePartID part: " << truePartID.part << std::endl;
+      std::cout << "truePartID ixn: " << truePartID.ixn << std::endl;
 
       // Just store the best MC match
       std::vector<caf::TrueParticleID> truePartIDVect;
