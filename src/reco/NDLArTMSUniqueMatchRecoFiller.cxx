@@ -380,7 +380,6 @@ namespace cafmaker
     if (possibleSPINEMatches.size() > 0) {
       Create_matches(possibleSPINEMatches,false,sr); // tells the matcher that it's not working with Pandora LAr tracks (therefore, SPINE tracks)
       }
-    std::cout << "matchIDs.size()" <<  matchIDs.size() << std::endl;
     }
   }
   // todo: this is a placeholder
