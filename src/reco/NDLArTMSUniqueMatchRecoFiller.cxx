@@ -16,13 +16,11 @@ namespace cafmaker
     }
   }
 
-  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut)
+  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut)
     : IRecoBranchFiller("LArTMSMatcher")
   {
     sigma_x = sigmaX;
     sigma_y = sigmaY;
-    single_angle = singleAngle;
-    sigma_angle = sigmaTh;
     sigma_angle_x = sigmaThX;
     sigma_angle_y = sigmaThY;
     use_time = useTime;
@@ -198,6 +196,8 @@ namespace cafmaker
       joint_track.enddir = tms_track.enddir;    // end direction of joint track is end direction of TMS track
       joint_track.time = tms_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time
       joint_track.Evis = lar_track.Evis + tms_track.Evis;
+	  joint_track.charge = tms_track.charge;
+	  joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/ // Divide by the LAr density (is that saved in the SR?) and add the dead LAr length
       // TODO: add the rest of the joint_track attributes
 	// Fill joint_track.charge from the TMS track, will also need length, and E
 
@@ -229,60 +229,52 @@ namespace cafmaker
       double lar_time = 0;
       caf::SRVector3D start_pos;
       double delta_t = 0; // initialize time of LAr track and time difference between it and TMS track to 0
-
-      if (single_angle) {
-        double angle = angles[2]; // overall angle between LAr and TMS track
-        matchScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle/sigma_angle,2);
-        // matchScore is a weighted sum of x and y distances between tracks (after projection) and angle between them
-      }
-      else {
-        double angle_x = angles[0];
-        double angle_y = angles[1]; // x and y components of LAr and TMS tracks
-        matchScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
-        // same as above except there are two angles not just one
-      }
-
+    
+      double angle_x = angles[0];
+      double angle_y = angles[1]; // x and y components of LAr and TMS tracks
+      matchScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
+		
       if (use_time) {
         // this handles time-based matching - using truth-level particle times for now instead of light in LAr
         
-	bool timeFail = false;
-	std::vector<float> tOv = trk.truthOverlap;
-	std::vector<caf::TrueParticleID> truIDs = trk.truth;
-	if (tOv.empty()) {
-	  timeFail = true;
-	}
-	if (truIDs.empty()) {
-	  timeFail = true;
-	}
-	if (truIDs.size() != tOv.size()) {
-	  timeFail = true;
-	}
-	if (!timeFail) {
-	int idx_max = std::distance(tOv.begin(),std::max_element(tOv.begin(),tOv.end()));
-	caf::TrueParticleID partID = truIDs[idx_max]; // ID of true particle that makes up the majority of the track
-	const auto& matchedPart = FindParticle(sr.mc,partID); // gets the particle object corresponding to the ID
-	if (matchedPart != nullptr) {
-	  lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns + time_smear; // adds gaussian smear to the true time with std 10 ns
-	  // Eventually we'll want to fill the LAr time from the track rather than the particle (trk.time instead of matchedPart->time). 
-	  // But LAr tracks from SPINE don't have their time attribute filled yet, so we use the true particle for now to keep the matcher agnostic to the LAr reco method
-	  double tms_time = tms_trk.time;
-          delta_t = tms_time - lar_time;
-          matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
-	  // Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
-	  std::vector<float> tOvTMS = tms_trk.truthOverlap;
-	  std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
-	  int idx_max_TMS = std::distance(tOvTMS.begin(),std::max_element(tOvTMS.begin(),tOvTMS.end()));
-	  caf::TrueParticleID partIDTMS = truIDsTMS[idx_max_TMS];
-	  const auto& TMSPart = FindParticle(sr.mc,partIDTMS);
+		bool timeFail = false;
+		std::vector<float> tOv = trk.truthOverlap;
+		std::vector<caf::TrueParticleID> truIDs = trk.truth;
+		if (tOv.empty()) {
+	  	  timeFail = true;
+		}
+		if (truIDs.empty()) {
+	  	  timeFail = true;
+		}
+		if (truIDs.size() != tOv.size()) {
+	  	  timeFail = true;
+		}
+		if (!timeFail) {
+		  int idx_max = std::distance(tOv.begin(),std::max_element(tOv.begin(),tOv.end()));
+		  caf::TrueParticleID partID = truIDs[idx_max]; // ID of true particle that makes up the majority of the track
+		  const auto& matchedPart = FindParticle(sr.mc,partID); // gets the particle object corresponding to the ID
+		  if (matchedPart != nullptr) {
+	  		lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns + time_smear; // adds gaussian smear to the true time with std 10 ns
+	  		// Eventually we'll want to fill the LAr time from the track rather than the particle (trk.time instead of matchedPart->time). 
+	  		// But LAr tracks from SPINE don't have their time attribute filled yet, so we use the true particle for now to keep the matcher agnostic to the LAr reco method
+	  	    double tms_time = tms_trk.time;
+            delta_t = tms_time - lar_time;
+            matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
+	  		// Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
+	  		std::vector<float> tOvTMS = tms_trk.truthOverlap;
+	  		std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
+	  		int idx_max_TMS = std::distance(tOvTMS.begin(),std::max_element(tOvTMS.begin(),tOvTMS.end()));
+	  		caf::TrueParticleID partIDTMS = truIDsTMS[idx_max_TMS];
+	  		const auto& TMSPart = FindParticle(sr.mc,partIDTMS);
 	  
-	  if (TMSPart != nullptr) {
-	    if (matchedPart->G4ID==TMSPart->G4ID) {
-		potential_match.trueMatch = true; // the two tracks in the match have the same true particle IDs, meaning they come from the same particle so they are a true match to each other
-		matchIDs.insert(matchedPart->G4ID) // adds the ID to the set of matchIDs we're keeping track of. We already know the LAr and TMS track have the same ID due to the check above
-	       }
-	    }
-     	 }
-	}
+	  		if (TMSPart != nullptr) {
+	    	  if (matchedPart->G4ID==TMSPart->G4ID) {
+			  potential_match.trueMatch = true; // the two tracks in the match have the same true particle IDs, meaning they come from the same particle so they are a true match to each other
+			  matchIDs.insert(matchedPart->G4ID) // adds the ID to the set of matchIDs we're keeping track of. We already know the LAr and TMS track have the same ID due to the check above
+	       	  }
+	    	}
+     	  }
+		}
       }
 
       caf::SRTMSID tmsid;
