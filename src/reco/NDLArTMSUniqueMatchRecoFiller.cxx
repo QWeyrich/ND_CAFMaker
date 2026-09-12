@@ -16,7 +16,7 @@ namespace cafmaker
     }
   }
 
-  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut)
+  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut, const string volName)
     : IRecoBranchFiller("LArTMSMatcher")
   {
     sigma_x = sigmaX;
@@ -27,6 +27,7 @@ namespace cafmaker
     mean_t = meanT;
     sigma_t = sigmaT;
     f_cut = fCut;
+	vol_name = volName;
     // nothing to do
     SetConfigured(true);
   }
@@ -197,7 +198,7 @@ namespace cafmaker
       joint_track.time = tms_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time
       joint_track.Evis = lar_track.Evis + tms_track.Evis;
 	  joint_track.charge = tms_track.charge;
-	  joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/ // Divide by the LAr density (is that saved in the SR?) and add the dead LAr length
+	  joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/1.396; // Divide by the LAr density and add the dead LAr length
       // TODO: add the rest of the joint_track attributes
 	// Fill joint_track.charge from the TMS track, will also need length, and E
 
