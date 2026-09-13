@@ -32,6 +32,98 @@ namespace cafmaker
     SetConfigured(true);
   }
 
+  void RecursiveGeometrySearch(TGeoManager *pSimGeom, const std::string &targetName, std::vector<std::vector<unsigned int>> &nodePaths,
+    std::vector<unsigned int> &currentPath)
+{
+    const std::string nodeName{pSimGeom->GetCurrentNode()->GetName()};
+    if (nodeName.find(targetName) != std::string::npos)
+    {
+     	nodePaths.emplace_back(currentPath);
+    }
+    else
+    {
+     	for (unsigned int i = 0; i < pSimGeom->GetCurrentNode()->GetNdaughters(); ++i)
+        {
+            pSimGeom->CdDown(i);
+            currentPath.emplace_back(i);
+            RecursiveGeometrySearch(pSimGeom, targetName, nodePaths, currentPath);
+            pSimGeom->CdUp();
+            currentPath.pop_back();
+        }
+    }
+    return;
+}
+
+  double NDLArTMSUniqueMatchRecoFiller::Query_geometry(const string input_volume)
+  {
+  // Code borrowed from Gianfranco Ingratta: /exp/dune/app/users/ingratta/tests/investigate_NDLAr_geo/investigate_geo.cpp
+  auto geo = TGeoManager::Import("NDLAr_geo.root");
+
+  // Go through the geometry and find the paths to the nodes we are interested in
+  std::vector<std::vector<unsigned int>> nodePaths; // Store the daughter indices in the path to the nodes
+  
+  std::vector<unsigned int> currentPath;
+
+  const string volName = input_volume; 
+  
+  RecursiveGeometrySearch(geo, volName, nodePaths, currentPath);
+
+  std::cout << "Found " << nodePaths.size() << " matches for volumes containing the name " << volName << std::endl;
+
+  for (unsigned int n = 0; n < nodePaths.size(); ++n)
+  {
+    const TGeoNode *pTopNode = geo->GetCurrentNode();
+    std::cout << "n = " << n << ", node = " << pTopNode->GetName() << "\n";
+    
+    if (pTopNode->GetName()==input_volume) break;
+
+    std::unique_ptr<TGeoHMatrix> pVolMatrix = std::make_unique<TGeoHMatrix>(*pTopNode->GetMatrix());
+
+    for (unsigned int d = 0; d < nodePaths.at(n).size(); ++d)
+    {
+      geo->CdDown(nodePaths.at(n).at(d));
+      const TGeoNode *pNode = geo->GetCurrentNode();
+      std::cout << "n = " << n << ", d = " << d << " node = " << pNode->GetName() << "\n";
+      std::unique_ptr<TGeoHMatrix> pMatrix = std::make_unique<TGeoHMatrix>(*pNode->GetMatrix());
+      pVolMatrix->Multiply(pMatrix.get());
+    }
+
+    const TGeoNode *pTargetNode = geo->GetCurrentNode();
+    std::cout << "target Node " << pTargetNode->GetName() << "\n";
+
+    TGeoVolume *pCurrentVol = pTargetNode->GetVolume();
+    std::cout << "pCurrentVol " << pCurrentVol->GetName() << "\n";
+
+    TGeoShape *pCurrentShape = pCurrentVol->GetShape();
+    std::cout << "pCurrentShape " << pCurrentShape->GetName() << "\n";
+    std::cout << "material " << pCurrentVol->GetMaterial()->GetName() << "\n";
+    std::cout << "density " << pCurrentVol->GetMaterial()->GetDensity()*1.6021771e-19 << "g / cm3\n";
+
+    TGeoBBox *pBox = dynamic_cast<TGeoBBox *>(pCurrentShape);
+
+	const double dx = pBox->GetDX() * 2.; // Note these are the half widths
+    const double dy = pBox->GetDY() * 2.;
+    const double dz = pBox->GetDZ() * 2.;
+    const double *pOrigin = pBox->GetOrigin();
+
+    std::cout << "dimensions : dx = " << dx << ", dy = " << dy << ", dz = " << dz << "\n";
+
+    double level1[3] = {0.0, 0.0, 0.0};
+    pTargetNode->LocalToMasterVect(pOrigin, level1);
+    // std::cout << "global coordinates : x = " << level1[0] << ", y = " << level1[1] << ", z = " << level1[2] << "\n";
+    //
+    const double *pVolTrans = pVolMatrix->GetTranslation();
+    const double centreX = (level1[0] + pVolTrans[0]);
+    const double centreY = (level1[1] + pVolTrans[1]);
+    const double centreZ = (level1[2] + pVolTrans[2]);
+    
+    std::cout << "global cooridnates : X = " << centreX << ", Y = " << centreY << ", Z = " << centreZ << "\n";   
+
+  }
+
+  return 0.;
+  }
+
   std::vector<double> NDLArTMSUniqueMatchRecoFiller::Project_track(const caf::SRTrack track, const bool forward) const
   {
     double x, y, z;
