@@ -23,7 +23,9 @@ namespace cafmaker
   class NDLArTMSUniqueMatchRecoFiller : public cafmaker::IRecoBranchFiller
   {
     public:
-      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const bool singleAngle, const double sigmaTh, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut);
+      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut, const string volName);
+
+      double Query_geometry(const string volName) const;
 
       std::vector<double> Project_track(const caf::SRTrack track, const bool forward) const;
 
