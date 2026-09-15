@@ -347,9 +347,8 @@ namespace cafmaker
 		  caf::TrueParticleID partID = truIDs[idx_max]; // ID of true particle that makes up the majority of the track
 		  const auto& matchedPart = FindParticle(sr.mc,partID); // gets the particle object corresponding to the ID
 		  if (matchedPart != nullptr) {
-	  		lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns + time_smear; // adds gaussian smear to the true time with std 10 ns
-	  		// Eventually we'll want to fill the LAr time from the track rather than the particle (trk.time instead of matchedPart->time). 
-	  		// But LAr tracks from SPINE don't have their time attribute filled yet, so we use the true particle for now to keep the matcher agnostic to the LAr reco method
+			lar_time = lar_trk.time;
+	  		// lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns + time_smear; // adds gaussian smear to the true time with std 10 ns
 	  	    double tms_time = tms_trk.time;
             delta_t = tms_time - lar_time;
             matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
