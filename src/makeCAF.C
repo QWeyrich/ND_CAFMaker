@@ -177,8 +177,7 @@ std::vector<std::unique_ptr<cafmaker::IRecoBranchFiller>> getRecoFillers(const c
                                                                                       par().cafmaker().useTime(), 
                                                                                       par().cafmaker().meanT(), 
                                                                                       par().cafmaker().sigmaT(), 
-                                                                                      par().cafmaker().fcut(),
-																					  par().cafmaker().volName()));
+                                                                                      par().cafmaker().fcut()));
     std::cout << "   ND-LAr + TMS matching\n";
   }
 
