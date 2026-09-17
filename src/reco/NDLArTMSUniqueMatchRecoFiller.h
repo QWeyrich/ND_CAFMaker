@@ -26,13 +26,7 @@ namespace cafmaker
   class NDLArTMSUniqueMatchRecoFiller : public cafmaker::IRecoBranchFiller
   {
     public:
-<<<<<<< Updated upstream
-      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut, const string volName);
-
-      double Query_geometry(const string volName) const;
-=======
       NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut);
->>>>>>> Stashed changes
 
       std::vector<double> Project_track(const caf::SRTrack track, const bool forward) const;
 
@@ -44,7 +38,7 @@ namespace cafmaker
 
       void Create_matches(std::vector<caf::SRNDTrackAssn> possibleMatches, caf::StandardRecord &sr) const;
 
-      std::vector<caf::SRNDTrackAssn> Compute_match_scores(const caf::SRNDLArInt ixn, const unsigned int ixn_lar, const unsigned int n_tracks, const unsigned int ixn_tms, const unsigned int itms, const double lar_z_cutoff, const caf::SRTrack tms_trk, caf::StandardRecord &sr, const Trigger &trigger, const float time_smear) const;
+      std::vector<caf::SRNDTrackAssn> Compute_match_scores(const caf::SRNDLArInt ixn, const unsigned int ixn_lar, const unsigned int n_tracks, const unsigned int ixn_tms, const unsigned int itms, const double lar_z_cutoff, const caf::SRTrack tms_trk, caf::StandardRecord &sr, const Trigger &trigger, const float time_smear, std::set<int> matchIDs) const;
 
       std::deque<Trigger> GetTriggers(int triggerType, bool beamOnly) const override;
 
