@@ -15,6 +15,7 @@
 #include "duneanaobj/StandardRecord/Navigate.h"
 #include "TMath.h"
 #include "TRandom3.h"
+#include <set>
 
 namespace cafmaker
 {
@@ -33,9 +34,9 @@ namespace cafmaker
 
       bool Consider_LAr_track(const caf::SRTrack lar_track, const double lar_z_cutoff) const;
 
-      double Muon_LAr_KE_Reco(const float trk_length, const double LAr_density) const;
+      double Muon_LAr_KE_Reco(const float trk_length) const;
 
-      void Create_matches(std::vector<caf::SRNDTrackAssn> possibleMatches, caf::StandardRecord &sr) const;
+      void Create_matches(std::vector<caf::SRNDTrackAssn> possibleMatches, const bool Pandora, caf::StandardRecord &sr) const;
 
       std::vector<caf::SRNDTrackAssn> Compute_match_scores(const caf::SRNDLArInt ixn, const unsigned int ixn_lar, const unsigned int n_tracks, const unsigned int ixn_tms, const unsigned int itms, const double lar_z_cutoff, const caf::SRTrack tms_trk, caf::StandardRecord &sr, const Trigger &trigger, const float time_smear, std::set<int> matchIDs) const;
 
@@ -57,8 +58,6 @@ namespace cafmaker
 
       double sigma_x;
       double sigma_y;
-      bool single_angle;
-      double sigma_angle;
       double sigma_angle_x;
       double sigma_angle_y;
       bool use_time;
@@ -66,7 +65,7 @@ namespace cafmaker
       double sigma_t;
       double f_cut;
 
-      // Dimensions of TMS and LAr fiducial volume [cm]
+      // Dimensions of TMS and LAr fiducial volume [cm]. Best practice would be to query geometry instead of hard-coding
       double tms_x_lim1 = -352.0;
       double tms_x_lim2 = 352.0;
       double tms_y_lim1 = -386.4;
@@ -80,6 +79,12 @@ namespace cafmaker
       double lar_y_lim2 = 82.9282;
       double lar_z_lim1 = 417.924;
       double lar_z_lim2 = 913.588;
+
+      const double LArDen = 1.3954; // LAr density [g/cm3], from https://github.com/DUNE/dune-tms/blob/main/src/TMS_Constants.h c. Sep. 16, 2026
+      const double ActiveLArEnd = 913.588; // End z-coordinate for LAr active volume [cm], from https://github.com/DUNE/dune-tms/blob/main/src/TMS_Constants.h c. Sep. 16, 2026
+      const double DeadLArEnd = 937; // End z-coordinate for LAr instrumented volume [cm]
+      const double TMSStart = 1117.75; // Start z-coordinate for TMS [cm], from https://github.com/DUNE/dune-tms/blob/main/src/TMS_Constants.h c. Sep. 16, 2026
+
   };
 }
 
