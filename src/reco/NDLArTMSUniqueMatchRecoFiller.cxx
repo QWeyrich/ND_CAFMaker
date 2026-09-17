@@ -1,9 +1,6 @@
 #include "NDLArTMSUniqueMatchRecoFiller.h"
 #include <cmath>
 #include "TRandom3.h"
-#include "TString.h"
-#include "TGeoManager.h"
-#include <iostream>
 
 namespace cafmaker
 {
@@ -19,11 +16,7 @@ namespace cafmaker
     }
   }
 
-<<<<<<< Updated upstream
-  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut, const string volName)
-=======
   NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut)
->>>>>>> Stashed changes
     : IRecoBranchFiller("LArTMSMatcher")
   {
     sigma_x = sigmaX;
@@ -34,101 +27,8 @@ namespace cafmaker
     mean_t = meanT;
     sigma_t = sigmaT;
     f_cut = fCut;
-	vol_name = volName;
     // nothing to do
     SetConfigured(true);
-  }
-
-  void RecursiveGeometrySearch(TGeoManager *pSimGeom, const std::string &targetName, std::vector<std::vector<unsigned int>> &nodePaths,
-    std::vector<unsigned int> &currentPath)
-{
-    const std::string nodeName{pSimGeom->GetCurrentNode()->GetName()};
-    if (nodeName.find(targetName) != std::string::npos)
-    {
-     	nodePaths.emplace_back(currentPath);
-    }
-    else
-    {
-     	for (unsigned int i = 0; i < pSimGeom->GetCurrentNode()->GetNdaughters(); ++i)
-        {
-            pSimGeom->CdDown(i);
-            currentPath.emplace_back(i);
-            RecursiveGeometrySearch(pSimGeom, targetName, nodePaths, currentPath);
-            pSimGeom->CdUp();
-            currentPath.pop_back();
-        }
-    }
-    return;
-}
-
-  double NDLArTMSUniqueMatchRecoFiller::Query_geometry(const string input_volume)
-  {
-  // Code borrowed from Gianfranco Ingratta: /exp/dune/app/users/ingratta/tests/investigate_NDLAr_geo/investigate_geo.cpp
-  auto geo = TGeoManager::Import("NDLAr_geo.root");
-
-  // Go through the geometry and find the paths to the nodes we are interested in
-  std::vector<std::vector<unsigned int>> nodePaths; // Store the daughter indices in the path to the nodes
-  
-  std::vector<unsigned int> currentPath;
-
-  const string volName = input_volume; 
-  
-  RecursiveGeometrySearch(geo, volName, nodePaths, currentPath);
-
-  std::cout << "Found " << nodePaths.size() << " matches for volumes containing the name " << volName << std::endl;
-
-  for (unsigned int n = 0; n < nodePaths.size(); ++n)
-  {
-    const TGeoNode *pTopNode = geo->GetCurrentNode();
-    std::cout << "n = " << n << ", node = " << pTopNode->GetName() << "\n";
-    
-    if (pTopNode->GetName()==input_volume) break;
-
-    std::unique_ptr<TGeoHMatrix> pVolMatrix = std::make_unique<TGeoHMatrix>(*pTopNode->GetMatrix());
-
-    for (unsigned int d = 0; d < nodePaths.at(n).size(); ++d)
-    {
-      geo->CdDown(nodePaths.at(n).at(d));
-      const TGeoNode *pNode = geo->GetCurrentNode();
-      std::cout << "n = " << n << ", d = " << d << " node = " << pNode->GetName() << "\n";
-      std::unique_ptr<TGeoHMatrix> pMatrix = std::make_unique<TGeoHMatrix>(*pNode->GetMatrix());
-      pVolMatrix->Multiply(pMatrix.get());
-    }
-
-    const TGeoNode *pTargetNode = geo->GetCurrentNode();
-    std::cout << "target Node " << pTargetNode->GetName() << "\n";
-
-    TGeoVolume *pCurrentVol = pTargetNode->GetVolume();
-    std::cout << "pCurrentVol " << pCurrentVol->GetName() << "\n";
-
-    TGeoShape *pCurrentShape = pCurrentVol->GetShape();
-    std::cout << "pCurrentShape " << pCurrentShape->GetName() << "\n";
-    std::cout << "material " << pCurrentVol->GetMaterial()->GetName() << "\n";
-    std::cout << "density " << pCurrentVol->GetMaterial()->GetDensity()*1.6021771e-19 << "g / cm3\n";
-
-    TGeoBBox *pBox = dynamic_cast<TGeoBBox *>(pCurrentShape);
-
-	const double dx = pBox->GetDX() * 2.; // Note these are the half widths
-    const double dy = pBox->GetDY() * 2.;
-    const double dz = pBox->GetDZ() * 2.;
-    const double *pOrigin = pBox->GetOrigin();
-
-    std::cout << "dimensions : dx = " << dx << ", dy = " << dy << ", dz = " << dz << "\n";
-
-    double level1[3] = {0.0, 0.0, 0.0};
-    pTargetNode->LocalToMasterVect(pOrigin, level1);
-    // std::cout << "global coordinates : x = " << level1[0] << ", y = " << level1[1] << ", z = " << level1[2] << "\n";
-    //
-    const double *pVolTrans = pVolMatrix->GetTranslation();
-    const double centreX = (level1[0] + pVolTrans[0]);
-    const double centreY = (level1[1] + pVolTrans[1]);
-    const double centreZ = (level1[2] + pVolTrans[2]);
-    
-    std::cout << "global cooridnates : X = " << centreX << ", Y = " << centreY << ", Z = " << centreZ << "\n";   
-
-  }
-
-  return 0.;
   }
 
   std::vector<double> NDLArTMSUniqueMatchRecoFiller::Project_track(const caf::SRTrack track, const bool forward) const
@@ -294,14 +194,6 @@ namespace cafmaker
       joint_track.end = tms_track.end;          // ending point of joint track is ending point of TMS track
       joint_track.dir = lar_track.dir;          // starting direction of joint track is starting direction of LAr track (Pandora or SPINE)
       joint_track.enddir = tms_track.enddir;    // end direction of joint track is end direction of TMS track
-<<<<<<< Updated upstream
-      joint_track.time = tms_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time
-      joint_track.Evis = lar_track.Evis + tms_track.Evis;
-	  joint_track.charge = tms_track.charge;
-	  joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/1.396; // Divide by the LAr density and add the dead LAr length
-      // TODO: add the rest of the joint_track attributes
-	// Fill joint_track.charge from the TMS track, will also need length, and E
-=======
       joint_track.time = lar_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time from tms_track.time
       joint_track.Evis = lar_track.Evis + tms_track.Evis;
       joint_track.charge = tms_track.charge;
@@ -318,12 +210,9 @@ namespace cafmaker
       DeadLArFrac = DeadLArDist / LArTMSGap; // What fraction of the distance between LAr and TMS is dead LAr?
       joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/LArDen + DeadLArFrac*gap_dist; // Divide the TMS areal density by the LAr density and add the dead LAr length
        
-      //TODO: Split this straight line distance (gap_dist) into segments as it passes through each subsequent material - only the dead LAr has been implemented so far
+      // TODO: Split this straight line distance (gap_dist) into segments as it passes through each subsequent material - only the dead LAr has been implemented so far
       joint_track.len_gcm2 = (lar_track.len_cm + DeadLArFrac*gap_dist)*LArDen + tms_track.len_gcm2;
-      // TODO: add the rest of the joint_track attributes
-      // Fill joint_track.charge from the TMS track, will also need length, and E
->>>>>>> Stashed changes
-
+      // TODO: add the rest of the joint_track attributes (E)
     }
   }
 
@@ -383,23 +272,7 @@ namespace cafmaker
 	  	    double tms_time = tms_trk.time;
             delta_t = tms_time - lar_time;
             matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
-<<<<<<< Updated upstream
-	  		// Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
-	  		std::vector<float> tOvTMS = tms_trk.truthOverlap;
-	  		std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
-	  		int idx_max_TMS = std::distance(tOvTMS.begin(),std::max_element(tOvTMS.begin(),tOvTMS.end()));
-	  		caf::TrueParticleID partIDTMS = truIDsTMS[idx_max_TMS];
-	  		const auto& TMSPart = FindParticle(sr.mc,partIDTMS);
-	  
-	  		if (TMSPart != nullptr) {
-	    	  if (matchedPart->G4ID==TMSPart->G4ID) {
-			  potential_match.trueMatch = true; // the two tracks in the match have the same true particle IDs, meaning they come from the same particle so they are a true match to each other
-			  matchIDs.insert(matchedPart->G4ID) // adds the ID to the set of matchIDs we're keeping track of. We already know the LAr and TMS track have the same ID due to the check above
-	       	  }
-	    	}
-     	  }
-		}
-=======
+
             // Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
             std::vector<float> tOvTMS = tms_trk.truthOverlap;
             std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
@@ -410,13 +283,13 @@ namespace cafmaker
               if (TMSPart != nullptr) {
                 if (matchedPart->G4ID==TMSPart->G4ID) {
                   trueMatch = true;
+				  matchIDs.insert(matchedPart->G4ID) // adds the ID to the set of matchIDs we're keeping track of. We already know the LAr and TMS track have the same ID due to the check above
                   // std::cout << "True Match!" << std::endl;
                 }
               }
             }
           }
         }
->>>>>>> Stashed changes
       }
 
       caf::SRTMSID tmsid;
@@ -440,17 +313,11 @@ namespace cafmaker
       potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
       potential_match.cosangdispl = cos(TMath::Pi()/180.0 * angles[2]);
       potential_match.trueMatch = trueMatch;
-
-<<<<<<< Updated upstream
       potential_match.deltaX = delta_x;
       potential_match.deltaY = delta_y;
       potential_match.deltaThetaX = angles[0];
       potential_match.deltaThetaY = angles[1];
       potential_match.deltaT = delta_t;
-
-      
-=======
->>>>>>> Stashed changes
       potentialMatchList.push_back(potential_match);
     }
 
