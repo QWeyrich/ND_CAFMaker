@@ -145,6 +145,44 @@ namespace cafmaker
     }
   }
 
+
+  double NDLArTMSUniqueMatchRecoFiller::MuonLArKEReco(const float trk_length, const double LAr_density)
+  { // Function for reconstructing the kinetic energy of a muon from the distance it would travel in LAr
+	// From larreco/RecoAlg/TrackMomentumCalculator.cxx
+	  
+	constexpr auto range_gramper_cm()
+  	{
+    	std::array<double, 73> Range_grampercm{
+      		{0.9833,   1.36,      1.786,    2.507,   3.321,   4.859,   6.598,   8.512,   10.58,   12.78,
+       		15.1,     17.52,     20.04,    25.31,   30.84,   36.59,   42.5,    54.73,   67.32,   86.66,
+       		106.3,    139.4,     172.5,    205.6,   238.5,   271.1,   303.5,   335.7,   367.7,   431.0,
+       		493.4,    555.2,     616.3,    736.8,   855.2,   1030.0,  1202.0,  1482.0,  1758.0,  2029.0,
+       		2297.0,   2562.0,    2825.0,   3085.0,  3343.0,  3854.0,  4359.0,  4859.0,  5354.0,  6333.0,
+       		7298.0,   8726.0,    10130.0,  12430.0, 14690.0, 16920.0, 19100.0, 21260.0, 23380.0, 25480.0,
+       		27550.0,  31610.0,   35580.0,  39460.0, 43260.0, 50620.0, 57680.0, 67780.0, 77340.0, 92220.0,
+       		1.06e+05, 1.188e+05, 1.307e+05}};
+    	for (double& value : Range_grampercm) {
+      		value /= LAr_density; // convert to cm
+    	}
+    return Range_grampercm;
+  	}
+
+  	constexpr auto Range_grampercm = range_gramper_cm();
+  	constexpr std::array<double, 73> KE_MeV{
+    	{10.0,    12.0,    14.0,    17.0,    20.0,    25.0,    30.0,    35.0,    40.0,    45.0,
+     	50.0,    55.0,    60.0,    70.0,    80.0,    90.0,    100.0,   120.0,   140.0,   170.0,
+     	200.0,   250.0,   300.0,   350.0,   400.0,   450.0,   500.0,   550.0,   600.0,   700.0,
+     	800.0,   900.0,   1000.0,  1200.0,  1400.0,  1700.0,  2000.0,  2500.0,  3000.0,  3500.0,
+     	4000.0,  4500.0,  5000.0,  5500.0,  6000.0,  7000.0,  8000.0,  9000.0,  10000.0, 12000.0,
+     	14000.0, 17000.0, 20000.0, 25000.0, 30000.0, 35000.0, 40000.0, 45000.0, 50000.0, 55000.0,
+     	60000.0, 70000.0, 80000.0, 90000.0, 1e+05,   1.2e+05, 1.4e+05, 1.7e+05, 2e+05,   2.5e+05,
+     	3e+05,   3.5e+05, 4e+05}};
+  	TGraph const KEvsR{73, Range_grampercm.data(), KE_MeV.data()};
+  	TSpline3 const KEvsR_spline3{"KEvsRS", &KEvsR};
+	
+	return KEvsR_spline3.Eval(trkrange);
+  }
+
   void NDLArTMSUniqueMatchRecoFiller::Create_matches(std::vector<caf::SRNDTrackAssn> possibleMatches, bool Pandora, caf::StandardRecord &sr) const
   {
     std::sort(possibleMatches.begin(),possibleMatches.end(),Track_match_sorter);
@@ -212,7 +250,10 @@ namespace cafmaker
        
       // TODO: Split this straight line distance (gap_dist) into segments as it passes through each subsequent material - only the dead LAr has been implemented so far
       joint_track.len_gcm2 = (lar_track.len_cm + DeadLArFrac*gap_dist)*LArDen + tms_track.len_gcm2;
-      // TODO: add the rest of the joint_track attributes (E)
+      // TODO: add the rest of the joint_track attributes (qual, truth, truthOverlap)
+	  double KE_mu = MuonLArKEReco(joint_track.len_cm,LArDen); // Gives muon kinetic energy in MeV
+	  float M_mu = 105.658; // Muon mass in MeV
+	  joint_track.E = KE_mu + M_mu;
     }
   }
 
@@ -323,7 +364,6 @@ namespace cafmaker
 
     return potentialMatchList;
   }
-
 
   void
   NDLArTMSUniqueMatchRecoFiller::_FillRecoBranches(const Trigger &trigger,
