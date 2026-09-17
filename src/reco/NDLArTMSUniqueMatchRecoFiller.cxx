@@ -146,7 +146,7 @@ namespace cafmaker
   }
 
 
-  double NDLArTMSUniqueMatchRecoFiller::MuonLArKEReco(const float trk_length, const double LAr_density)
+  double NDLArTMSUniqueMatchRecoFiller::Muon_LAr_KE_Reco(const float trk_length, const double LAr_density) const
   { // Function for reconstructing the kinetic energy of a muon from the distance it would travel in LAr
 	// From larreco/RecoAlg/TrackMomentumCalculator.cxx
 	  
@@ -251,7 +251,7 @@ namespace cafmaker
       // TODO: Split this straight line distance (gap_dist) into segments as it passes through each subsequent material - only the dead LAr has been implemented so far
       joint_track.len_gcm2 = (lar_track.len_cm + DeadLArFrac*gap_dist)*LArDen + tms_track.len_gcm2;
       // TODO: add the rest of the joint_track attributes (qual, truth, truthOverlap)
-	  double KE_mu = MuonLArKEReco(joint_track.len_cm,LArDen); // Gives muon kinetic energy in MeV
+	  double KE_mu = Muon_LAr_KE_Reco(joint_track.len_cm,LArDen); // Gives muon kinetic energy in MeV
 	  float M_mu = 105.658; // Muon mass in MeV
 	  joint_track.E = KE_mu + M_mu;
     }
