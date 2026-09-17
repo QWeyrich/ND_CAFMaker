@@ -36,6 +36,8 @@ namespace cafmaker
 
       bool Consider_LAr_track(const caf::SRTrack lar_track, const double lar_z_cutoff) const;
 
+      double Muon_LAr_KE_Reco(const float trk_length, const double LAr_density) const;
+
       void Create_matches(std::vector<caf::SRNDTrackAssn> possibleMatches, caf::StandardRecord &sr) const;
 
       std::vector<caf::SRNDTrackAssn> Compute_match_scores(const caf::SRNDLArInt ixn, const unsigned int ixn_lar, const unsigned int n_tracks, const unsigned int ixn_tms, const unsigned int itms, const double lar_z_cutoff, const caf::SRTrack tms_trk, caf::StandardRecord &sr, const Trigger &trigger, const float time_smear, std::set<int> matchIDs) const;
