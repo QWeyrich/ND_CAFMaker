@@ -15,9 +15,6 @@
 #include "duneanaobj/StandardRecord/Navigate.h"
 #include "TMath.h"
 #include "TRandom3.h"
-#include "TString.h"
-#include "TGeoManager.h"
-#include <iostream>
 
 namespace cafmaker
 {
