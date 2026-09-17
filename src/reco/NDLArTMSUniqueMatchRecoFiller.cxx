@@ -1,6 +1,9 @@
 #include "NDLArTMSUniqueMatchRecoFiller.h"
 #include <cmath>
 #include "TRandom3.h"
+#include "TString.h"
+#include "TGeoManager.h"
+#include <iostream>
 
 namespace cafmaker
 {
@@ -16,7 +19,11 @@ namespace cafmaker
     }
   }
 
+<<<<<<< Updated upstream
   NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut, const string volName)
+=======
+  NDLArTMSUniqueMatchRecoFiller::NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut)
+>>>>>>> Stashed changes
     : IRecoBranchFiller("LArTMSMatcher")
   {
     sigma_x = sigmaX;
@@ -287,12 +294,35 @@ namespace cafmaker
       joint_track.end = tms_track.end;          // ending point of joint track is ending point of TMS track
       joint_track.dir = lar_track.dir;          // starting direction of joint track is starting direction of LAr track (Pandora or SPINE)
       joint_track.enddir = tms_track.enddir;    // end direction of joint track is end direction of TMS track
+<<<<<<< Updated upstream
       joint_track.time = tms_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time
       joint_track.Evis = lar_track.Evis + tms_track.Evis;
 	  joint_track.charge = tms_track.charge;
 	  joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/1.396; // Divide by the LAr density and add the dead LAr length
       // TODO: add the rest of the joint_track attributes
 	// Fill joint_track.charge from the TMS track, will also need length, and E
+=======
+      joint_track.time = lar_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time from tms_track.time
+      joint_track.Evis = lar_track.Evis + tms_track.Evis;
+      joint_track.charge = tms_track.charge;
+
+      // TODO: The following values pertain to the dead region between LAr and TMS. They may not remain accurate as geometry changes. Long-term solution is to directly query the geometry file instead
+      const double LArDen = 1.3954; // LAr density [g/cm3], from https://github.com/DUNE/dune-tms/blob/main/src/TMS_Constants.h c. Sep. 16, 2026
+      const double ActiveLarEnd = 913.588; // End z-coordinate for LAr active volume [cm], from https://github.com/DUNE/dune-tms/blob/main/src/TMS_Constants.h c. Sep. 16, 2026
+      const double DeadLarEnd = 937; // End z-coordinate for LAr instrumented volume [cm]
+      const double TMSStart = 1117.75; // Start z-coordinate for TMS [cm], from https://github.com/DUNE/dune-tms/blob/main/src/TMS_Constants.h c. Sep. 16, 2026
+
+      gap_dist = sqrt(pow(tms_track.start.x - lar_track.end.x,2)+pow(tms_track.start.y - lar_track.end.y,2)+pow(tms_track.start.z - lar_track.end.z,2));
+      LArTMSGap = TMSStart - ActiveLArEnd;
+      DeadLArDist = DeadLArEnd - ActiveLArEnd;
+      DeadLArFrac = DeadLArDist / LArTMSGap; // What fraction of the distance between LAr and TMS is dead LAr?
+      joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/LArDen + DeadLArFrac*gap_dist; // Divide the TMS areal density by the LAr density and add the dead LAr length
+       
+      //TODO: Split this straight line distance (gap_dist) into segments as it passes through each subsequent material - only the dead LAr has been implemented so far
+      joint_track.len_gcm2 = (lar_track.len_cm + DeadLArFrac*gap_dist)*LArDen + tms_track.len_gcm2;
+      // TODO: add the rest of the joint_track attributes
+      // Fill joint_track.charge from the TMS track, will also need length, and E
+>>>>>>> Stashed changes
 
     }
   }
@@ -304,6 +334,7 @@ namespace cafmaker
     for (unsigned int itrk = 0; itrk < n_tracks; itrk++)
     {
       caf::SRTrack trk = ixn.tracks[itrk];
+      bool trueMatch = false;
 
       if (!Consider_LAr_track(trk,lar_z_cutoff)) {
         continue; //skips the lar track if it isn't suitable according to the function
@@ -352,6 +383,7 @@ namespace cafmaker
 	  	    double tms_time = tms_trk.time;
             delta_t = tms_time - lar_time;
             matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
+<<<<<<< Updated upstream
 	  		// Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
 	  		std::vector<float> tOvTMS = tms_trk.truthOverlap;
 	  		std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
@@ -367,6 +399,24 @@ namespace cafmaker
 	    	}
      	  }
 		}
+=======
+            // Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
+            std::vector<float> tOvTMS = tms_trk.truthOverlap;
+            std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
+            if (!tOvTMS.empty() && !truIDsTMS.empty() && tOvTMS.size() == truIDsTMS.size()) {
+              int idx_max_TMS = std::distance(tOvTMS.begin(),std::max_element(tOvTMS.begin(),tOvTMS.end()));
+              caf::TrueParticleID partIDTMS = truIDsTMS[idx_max_TMS];
+              const auto& TMSPart = FindParticle(sr.mc,partIDTMS);
+              if (TMSPart != nullptr) {
+                if (matchedPart->G4ID==TMSPart->G4ID) {
+                  trueMatch = true;
+                  // std::cout << "True Match!" << std::endl;
+                }
+              }
+            }
+          }
+        }
+>>>>>>> Stashed changes
       }
 
       caf::SRTMSID tmsid;
@@ -389,7 +439,9 @@ namespace cafmaker
       potential_match.matchScore = matchScore;
       potential_match.transdispl = sqrt(pow(delta_x,2)+pow(delta_y,2));
       potential_match.cosangdispl = cos(TMath::Pi()/180.0 * angles[2]);
+      potential_match.trueMatch = trueMatch;
 
+<<<<<<< Updated upstream
       potential_match.deltaX = delta_x;
       potential_match.deltaY = delta_y;
       potential_match.deltaThetaX = angles[0];
@@ -397,6 +449,8 @@ namespace cafmaker
       potential_match.deltaT = delta_t;
 
       
+=======
+>>>>>>> Stashed changes
       potentialMatchList.push_back(potential_match);
     }
 

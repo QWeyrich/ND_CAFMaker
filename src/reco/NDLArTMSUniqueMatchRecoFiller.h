@@ -15,6 +15,9 @@
 #include "duneanaobj/StandardRecord/Navigate.h"
 #include "TMath.h"
 #include "TRandom3.h"
+#include "TString.h"
+#include "TGeoManager.h"
+#include <iostream>
 
 namespace cafmaker
 {
@@ -23,9 +26,13 @@ namespace cafmaker
   class NDLArTMSUniqueMatchRecoFiller : public cafmaker::IRecoBranchFiller
   {
     public:
+<<<<<<< Updated upstream
       NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut, const string volName);
 
       double Query_geometry(const string volName) const;
+=======
+      NDLArTMSUniqueMatchRecoFiller(const double sigmaX, const double sigmaY, const double sigmaThX, const double sigmaThY, const bool useTime, const double meanT, const double sigmaT, const double fCut);
+>>>>>>> Stashed changes
 
       std::vector<double> Project_track(const caf::SRTrack track, const bool forward) const;
 
