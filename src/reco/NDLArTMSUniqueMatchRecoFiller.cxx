@@ -417,6 +417,7 @@ namespace cafmaker
       joint_track.time = lar_track.time;        // TODO: once we have reco LAr time working properly for both Pandora and SPINE this should be switched to lar_track.time from tms_track.time
       joint_track.Evis = lar_track.Evis + tms_track.Evis;
       joint_track.charge = tms_track.charge;
+      joint_track.part = lar_track.part;        // Joint track inherits LAr track's reco particle ID
 
       // TODO: The following values pertain to the dead region between LAr and TMS. They may not remain accurate as geometry changes. Long-term solution is to directly query the geometry file instead
       float gap_dist = sqrt(pow(tms_track.start.x - lar_track.end.x,2)+pow(tms_track.start.y - lar_track.end.y,2)+pow(tms_track.start.z - lar_track.end.z,2));
@@ -548,7 +549,6 @@ namespace cafmaker
             std::cout << "     Sigma T " << sigma_t << std::endl;
             std::cout << "     T Term " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
             matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
-
             // Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
             std::vector<float> tOvTMS = tms_trk.truthOverlap;
             std::vector<caf::TrueParticleID> truIDsTMS = tms_trk.truth;
