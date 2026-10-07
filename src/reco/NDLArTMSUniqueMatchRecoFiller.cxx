@@ -307,32 +307,27 @@ namespace cafmaker
       matchScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
 
       if (use_time) {
-        // this handles time-based matching - using truth-level particle times for now instead of light in LAr 
-        bool timeFail = false;
-        std::vector<float> tOv = trk.truthOverlap;
-        std::vector<caf::TrueParticleID> truIDs = trk.truth;
-        if (tOv.empty()) {
-          timeFail = true;
+        // this handles time-based matching
+        std::cout << "    USING TIME" << std::endl;
+        if (!use_smear_time) {// this occurs when the LAr time has filled in the file
+          std::cout << "    NO SMEAR TIME" << std::endl;
+          lar_time = trk.time;
         }
-        if (truIDs.empty()) {
-          timeFail = true;
-        }
-        if (truIDs.size() != tOv.size()) {
-          timeFail = true;
-        }
-        if (!timeFail) {
-          int idx_max = std::distance(tOv.begin(),std::max_element(tOv.begin(),tOv.end()));
-          caf::TrueParticleID partID = truIDs[idx_max]; // ID of true particle that makes up the majority of the track
-          const auto& matchedPart = FindParticle(sr.mc,partID); // gets the particle object corresponding to the ID
-          if (matchedPart != nullptr) {
-            if (use_smear_time) {// this triggers if we're using a file where the LAr time hasn't filled
-              lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns + time_smear; // adds gaussian smear to the true time with std 10 ns
-            }
-            else {
-              lar_time = trk.time;
-            }
+        if (use_smear_time) {// this triggers if we're using a file where the LAr time hasn't filled
+          std::cout << "    USING SMEAR TIME" << std::endl;
+          if (!truthFail) {
+            int idx_max = std::distance(tOv.begin(),std::max_element(tOv.begin(),tOv.end()));
+            caf::TrueParticleID partID = truIDs[idx_max]; // ID of true particle that makes up the majority of the track
+            const auto& matchedPart = FindParticle(sr.mc,partID); // gets the particle object corresponding to the ID
+            lar_time = matchedPart->time - 1e9*trigger.triggerTime_s - trigger.triggerTime_ns + time_smear; // adds gaussian smear to the true time with std 10 ns
+            std::cout << "     LAr Time " << lar_time << std::endl;
             double tms_time = tms_trk.time;
+            std::cout << "     TMS Time " << tms_time << std::endl;
             delta_t = tms_time - lar_time;
+            std::cout << "     Delta T " << delta_t << std::endl;
+            std::cout << "     Mean T " << mean_t << std::endl;
+            std::cout << "     Sigma T " << sigma_t << std::endl;
+            std::cout << "     T Term " << pow((delta_t-mean_t)/sigma_t,2) << std::endl;
             matchScore += pow((delta_t-mean_t)/sigma_t,2); // adds the time difference term to the matchScore
 
             // Following code is for checking if the particle IDs for matching tracks themselves match. This allows you to identify true matches
