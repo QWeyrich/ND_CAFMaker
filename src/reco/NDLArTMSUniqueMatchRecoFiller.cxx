@@ -213,7 +213,7 @@ namespace cafmaker
       caf::SRNDTrackAssn track_match = possibleMatches[match_idx];
       double score = track_match.matchScore;
       if (score > f_cut) {
-        break;
+        continue;
       }
       caf::SRNDLArID larid = track_match.larid;
       bool seen_lar = false; // checks if this LAr track has been matched already
@@ -305,6 +305,25 @@ namespace cafmaker
       float angle_x = angles[0];
       float angle_y = angles[1]; // x and y components of LAr and TMS tracks
       matchScore = pow(delta_x/sigma_x,2) + pow(delta_y/sigma_y,2) + pow(angle_x/sigma_angle_x,2)+ pow(angle_y/sigma_angle_y,2);
+      bool truthFail = false;
+      std::vector<float> tOv = trk.truthOverlap;
+      std::vector<caf::TrueParticleID> truIDs = trk.truth;
+      if (tOv.empty()) {
+        truthFail = true;
+      }
+      if (truIDs.empty()) {
+        truthFail = true;
+      }
+      if (truIDs.size() != tOv.size()) {
+        truthFail = true;
+      }
+      if (!truthFail) {
+        int idx_max = std::distance(tOv.begin(),std::max_element(tOv.begin(),tOv.end()));
+        caf::TrueParticleID partID = truIDs[idx_max]; // ID of true particle that makes up the majority of the track
+        const auto& matchedPart = FindParticle(sr.mc,partID); // gets the particle object corresponding to the ID
+        if (matchedPart == nullptr) {
+          truthFail = true;
+        }
 
       if (use_time) {
         // this handles time-based matching
