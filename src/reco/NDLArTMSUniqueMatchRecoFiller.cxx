@@ -289,8 +289,8 @@ namespace cafmaker
       }
 
       std::vector<float> proj_vec = Project_track(trk,true);
-      double delta_x = tms_trk.start.x - proj_vec[0];
-      double delta_y = tms_trk.start.y - proj_vec[1];
+      float delta_x = tms_trk.start.x - proj_vec[0];
+      float delta_y = tms_trk.start.y - proj_vec[1];
 
       std::vector<float> angles = Angle_between_tracks(tms_trk,trk);
       angles[0] = std::copysign(angles[0],delta_x);
