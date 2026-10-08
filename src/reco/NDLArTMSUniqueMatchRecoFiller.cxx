@@ -706,7 +706,7 @@ namespace cafmaker
           float start_z = matchedParticle->start_pos.z;
           if ((start_x > lar_x_lim1)&&(start_x < lar_x_lim2)
               &&(start_y > lar_y_lim1)&&(start_y < lar_y_lim2)
-              &&((start_z > lar_z_lim1)&&(start_z < lar_z_lim2)) {
+              &&(start_z > lar_z_lim1)&&(start_z < lar_z_lim2)) {
 
                 float match_true_E = matchedParticle->p.E; // energy of the true particle
                 int match_true_PDG = matchedParticle->pdg; // PDG of the true particle
