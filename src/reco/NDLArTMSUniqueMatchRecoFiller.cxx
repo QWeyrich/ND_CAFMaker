@@ -138,7 +138,7 @@ namespace cafmaker
 
     if ((x_start > tms_x_lim1)&&(x_start < tms_x_lim2) &&
         (y_start > tms_y_lim1)&&(y_start < tms_y_lim2) &&
-        (z_start > tms_z_lim1 -20)&&(z_start < tms_z_lim1 + tms_z_cutoff) && // checks track begins within fiducial volume and close enough to front
+        (z_start > tms_z_lim1)&&(z_start < tms_z_lim1 + tms_z_cutoff) && // checks track begins within fiducial volume and close enough to front
       
         (Project_track(tms_track,false)[0] > lar_x_lim1)&&(Project_track(tms_track,false)[0] < lar_x_lim2) &&
         (Project_track(tms_track,false)[1] > lar_y_lim1)&&(Project_track(tms_track,false)[1] < lar_y_lim2)) // checks that direction would have allowed it to originate from LAr
@@ -166,8 +166,8 @@ namespace cafmaker
               std::cout << "     y_start " << y_start << std::endl;
               std::cout << "     tms_y_lim2 " << tms_y_lim2 << std::endl;
             }
-            if (z_start < tms_z_lim1-20){
-              std::cout << "    Z_START < TMS_Z_LIM1-20" << std::endl;
+            if (z_start < tms_z_lim1){
+              std::cout << "    Z_START < TMS_Z_LIM1" << std::endl;
               std::cout << "     z_start " << z_start << std::endl;
               std::cout << "     tms_z_lim1 " << tms_z_lim1 << std::endl;
             }
@@ -425,11 +425,21 @@ namespace cafmaker
       double DeadLArDist = DeadLArEnd - ActiveLArEnd;
       double DeadLArFrac = DeadLArDist / LArTMSGap; // What fraction of the distance between LAr and TMS is dead LAr?
       joint_track.len_cm = lar_track.len_cm + tms_track.len_gcm2/LArDen + DeadLArFrac*gap_dist; // Divide the TMS areal density by the LAr density and add the dead LAr length
+      std::cout << "LAr Length " << lar_track.len_cm << std::endl;
+      std::cout << "TMS Track Length gcm2 " << tms_track.len_gcm2;
+      std::cout << "LAr Density " << LArDen << std::endl;
+      std::cout << "TMS Effective Length " << tms_track.len_gcm2/LArDen << std::endl;
+      std::cout << "Dead LAr Frac " << DeadLArFrac << std::endl;
+      std::cout << "gap_dist  " << gap_dist << std::endl;
+      std::cout << "Dead LAr Dist " << DeadLArFrac*gap_dist << std::endl;
+      std::cout << "Total Length Sum " << lar_track.len_cm + tms_track.len_gcm2/LArDen + DeadLArFrac*gap_dist << std::endl;
+      std::cout << "Total Length as Filled " << joint_track.len_cm << std::endl;
 
       // TODO: Split this straight line distance (gap_dist) into segments as it passes through each subsequent material - only the dead LAr has been implemented so far
       joint_track.len_gcm2 = (lar_track.len_cm + DeadLArFrac*gap_dist)*LArDen + tms_track.len_gcm2;
       // TODO: add the rest of the joint_track attributes (qual, truth, truthOverlap)
       double KE_mu = Muon_LAr_KE_Reco(joint_track.len_cm); // Gives muon kinetic energy in MeV
+      std::cout << "Reco KE " << KE_mu << std::endl;
       float M_mu = 105.658; // Muon mass in MeV
       joint_track.E = KE_mu + M_mu;
     }
